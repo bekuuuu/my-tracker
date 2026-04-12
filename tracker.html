@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reselling Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; min-height: 100vh; padding: 1.5rem; }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 1.5rem; color: #fff; letter-spacing: -0.3px; }
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .metric { background: #1a1a1a; border: 0.5px solid #2a2a2a; border-radius: 12px; padding: 0.875rem; }
+  .metric .lbl { font-size: 11px; color: #666; margin-bottom: 4px; }
+  .metric .val { font-size: 20px; font-weight: 600; color: #fff; }
+  .metric .val.green { color: #4ade80; }
+  .metric .val.red { color: #f87171; }
+  .form-card { background: #1a1a1a; border: 0.5px solid #2a2a2a; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; }
+  .form-card h2 { font-size: 13px; font-weight: 500; color: #aaa; margin-bottom: 12px; }
+  .field { margin-bottom: 10px; }
+  .field label { font-size: 11px; color: #666; display: block; margin-bottom: 3px; }
+  .field input, .field select, .field textarea { width: 100%; background: #111; border: 0.5px solid #333; border-radius: 8px; padding: 8px 10px; color: #e0e0e0; font-size: 13px; outline: none; font-family: inherit; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #555; }
+  .field select option { background: #1a1a1a; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .img-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-top: 6px; display: none; }
+  .img-url-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-top: 6px; display: none; }
+  .add-btn { width: 100%; background: #fff; color: #000; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; }
+  .add-btn:hover { background: #e0e0e0; }
+  .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .item-card { background: #1a1a1a; border: 0.5px solid #2a2a2a; border-radius: 12px; overflow: hidden; position: relative; }
+  .item-img { width: 100%; height: 180px; object-fit: cover; display: block; background: #111; }
+  .item-img-placeholder { width: 100%; height: 180px; background: #111; display: flex; align-items: center; justify-content: center; color: #444; font-size: 12px; }
+  .item-body { padding: 0.875rem; }
+  .item-name { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .item-meta { font-size: 12px; color: #888; margin-bottom: 3px; }
+  .item-link { font-size: 11px; color: #60a5fa; word-break: break-all; display: block; margin-top: 4px; }
+  .item-profit { font-size: 12px; font-weight: 600; margin-top: 6px; }
+  .item-profit.pos { color: #4ade80; }
+  .item-profit.neg { color: #f87171; }
+  .status-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 600; margin-bottom: 6px; }
+  .s-want { background: #1e3a5f; color: #60a5fa; }
+  .s-ordered { background: #3d2a00; color: #fbbf24; }
+  .s-sold { background: #14291a; color: #4ade80; }
+  .del-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); border: none; color: #aaa; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; }
+  .del-btn:hover { color: #f87171; }
+  .empty { text-align: center; color: #444; font-size: 13px; padding: 3rem 0; grid-column: 1/-1; }
+  .tab-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .tab { font-size: 12px; padding: 5px 12px; border-radius: 99px; border: 0.5px solid #333; background: transparent; color: #888; cursor: pointer; }
+  .tab.active { background: #fff; color: #000; border-color: #fff; }
+  @media(max-width:500px){ .row3{grid-template-columns:1fr 1fr;} .summary{grid-template-columns:1fr 1fr 1fr;} }
+</style>
+</head>
+<body>
+
+<h1>Reselling Tracker</h1>
+
+<div class="summary">
+  <div class="metric"><div class="lbl">Нийт бараа</div><div class="val" id="s-count">0</div></div>
+  <div class="metric"><div class="lbl">Нийт зардал</div><div class="val" id="s-cost">€0</div></div>
+  <div class="metric"><div class="lbl">Ашиг (est.)</div><div class="val green" id="s-profit">€0</div></div>
+</div>
+
+<div class="form-card">
+  <h2>Шинэ бараа нэмэх</h2>
+  <div class="field">
+    <label>Барааны нэр</label>
+    <input type="text" id="f-name" placeholder="e.g. Crypta Celsis black hoodie">
+  </div>
+  <div class="row2" style="margin-bottom:10px">
+    <div class="field" style="margin:0">
+      <label>Төрөл</label>
+      <select id="f-type">
+        <option>Hoodie</option>
+        <option>Zip hoodie</option>
+        <option>T-shirt</option>
+        <option>Shirt</option>
+        <option>Sweatshirt</option>
+      </select>
+    </div>
+    <div class="field" style="margin:0">
+      <label>Статус</label>
+      <select id="f-status">
+        <option value="want">Сонирхож байна</option>
+        <option value="ordered">Захиалсан</option>
+        <option value="sold">Зарсан</option>
+      </select>
+    </div>
+  </div>
+  <div class="row3" style="margin-bottom:10px">
+    <div class="field" style="margin:0">
+      <label>Хэмжээ</label>
+      <select id="f-size"><option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option><option>XXL</option></select>
+    </div>
+    <div class="field" style="margin:0">
+      <label>Авах үнэ (€)</label>
+      <input type="number" id="f-buy" placeholder="22" min="0">
+    </div>
+    <div class="field" style="margin:0">
+      <label>Зарах үнэ (€)</label>
+      <input type="number" id="f-sell" placeholder="65" min="0">
+    </div>
+  </div>
+  <div class="field">
+    <label>Өнгө</label>
+    <input type="text" id="f-color" placeholder="Black, White...">
+  </div>
+  <div class="field">
+    <label>Бараа линк (Weidian / DHgate)</label>
+    <input type="text" id="f-link" placeholder="https://...">
+  </div>
+  <div class="field">
+    <label>Зургийн URL (Weidian дээрх зургийн линк)</label>
+    <input type="text" id="f-imgurl" placeholder="https://img.xxx.com/..." oninput="previewUrl(this.value)">
+    <img id="preview-url" class="img-url-preview" alt="preview">
+  </div>
+  <div class="field">
+    <label>Эсвэл зураг upload хийх</label>
+    <input type="file" id="f-img" accept="image/*" onchange="previewFile(this)">
+    <img id="preview-file" class="img-preview" alt="preview">
+  </div>
+  <button class="add-btn" onclick="addItem()">+ Нэмэх</button>
+</div>
+
+<div class="tab-row">
+  <button class="tab active" onclick="setFilter('all', this)">Бүгд</button>
+  <button class="tab" onclick="setFilter('want', this)">Сонирхож байна</button>
+  <button class="tab" onclick="setFilter('ordered', this)">Захиалсан</button>
+  <button class="tab" onclick="setFilter('sold', this)">Зарсан</button>
+</div>
+
+<div class="items-grid" id="list"></div>
+
+<script>
+let items = [];
+let filter = 'all';
+try { items = JSON.parse(localStorage.getItem('resell_v2') || '[]'); } catch(e){}
+
+function save(){ try{ localStorage.setItem('resell_v2', JSON.stringify(items)); }catch(e){} }
+
+function previewUrl(val){
+  const img = document.getElementById('preview-url');
+  if(val){ img.src=val; img.style.display='block'; } else { img.style.display='none'; }
+}
+
+function previewFile(input){
+  const img = document.getElementById('preview-file');
+  if(input.files && input.files[0]){
+    const reader = new FileReader();
+    reader.onload = e => { img.src=e.target.result; img.style.display='block'; };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function statusBadge(s){
+  if(s==='want') return '<span class="status-badge s-want">Сонирхож байна</span>';
+  if(s==='ordered') return '<span class="status-badge s-ordered">Захиалсан</span>';
+  return '<span class="status-badge s-sold">Зарсан</span>';
+}
+
+function setFilter(f, el){
+  filter = f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function render(){
+  const list = document.getElementById('list');
+  const filtered = filter==='all' ? items : items.filter(i=>i.status===filter);
+  if(!filtered.length){
+    list.innerHTML='<div class="empty">Бараа байхгүй байна.</div>';
+    updateSummary(); return;
+  }
+  list.innerHTML = filtered.map((it, fi)=>{
+    const realIdx = items.indexOf(it);
+    const profit = (it.sell||0)-(it.buy||0);
+    const imgHtml = it.img
+      ? `<img class="item-img" src="${it.img}" alt="${it.name}" onerror="this.style.display='none'">`
+      : `<div class="item-img-placeholder">Зураг байхгүй</div>`;
+    const linkHtml = it.link ? `<a class="item-link" href="${it.link}" target="_blank">${it.link.length>45?it.link.slice(0,45)+'...':it.link}</a>` : '';
+    const profitHtml = it.buy ? `<div class="item-profit ${profit>=0?'pos':'neg'}">Ашиг: €${profit}</div>` : '';
+    return `<div class="item-card">
+      <button class="del-btn" onclick="remove(${realIdx})">✕</button>
+      ${imgHtml}
+      <div class="item-body">
+        ${statusBadge(it.status)}
+        <div class="item-name">${it.name}</div>
+        <div class="item-meta">${it.type} · ${it.size} · ${it.color||'—'}</div>
+        <div class="item-meta">Авах: €${it.buy||'—'} &nbsp;·&nbsp; Зарах: €${it.sell||'—'}</div>
+        ${profitHtml}
+        ${linkHtml}
+      </div>
+    </div>`;
+  }).join('');
+  updateSummary();
+}
+
+function updateSummary(){
+  document.getElementById('s-count').textContent = items.length;
+  const cost = items.reduce((a,b)=>a+(+b.buy||0),0);
+  const profit = items.reduce((a,b)=>a+((+b.sell||0)-(+b.buy||0)),0);
+  document.getElementById('s-cost').textContent = '€'+cost;
+  const pel = document.getElementById('s-profit');
+  pel.textContent = (profit>=0?'€':'−€')+Math.abs(profit);
+  pel.className = 'val '+(profit>=0?'green':'red');
+}
+
+function addItem(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ alert('Барааны нэр оруулна уу.'); return; }
+  const fileImg = document.getElementById('preview-file').src;
+  const urlImg = document.getElementById('f-imgurl').value.trim();
+  const img = fileImg && fileImg !== window.location.href ? fileImg : (urlImg || '');
+  items.unshift({
+    name,
+    type: document.getElementById('f-type').value,
+    status: document.getElementById('f-status').value,
+    size: document.getElementById('f-size').value,
+    color: document.getElementById('f-color').value.trim(),
+    buy: parseFloat(document.getElementById('f-buy').value)||0,
+    sell: parseFloat(document.getElementById('f-sell').value)||0,
+    link: document.getElementById('f-link').value.trim(),
+    img
+  });
+  save(); render();
+  ['f-name','f-color','f-buy','f-sell','f-link','f-imgurl'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('preview-file').style.display='none';
+  document.getElementById('preview-url').style.display='none';
+  document.getElementById('f-img').value='';
+}
+
+function remove(i){ if(confirm('Устгах уу?')){ items.splice(i,1); save(); render(); } }
+
+render();
+</script>
+</body>
+</html>
