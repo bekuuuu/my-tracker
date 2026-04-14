@@ -4,345 +4,1087 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resell Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;min-height:100vh;padding:1.25rem}
-h1{font-size:18px;font-weight:700;color:#fff;margin-bottom:1.25rem;letter-spacing:-0.3px}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.stats-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem}
-.metric{background:#161616;border:0.5px solid #222;border-radius:10px;padding:.75rem}
-.metric .ml{font-size:10px;color:#555;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
-.metric .mv{font-size:18px;font-weight:700;color:#fff}
-.metric .mv.g{color:#4ade80}.metric .mv.r{color:#f87171}.metric .mv.b{color:#60a5fa}.metric .mv.y{color:#fbbf24}
-.form-card{background:#161616;border:0.5px solid #222;border-radius:12px;padding:1rem;margin-bottom:1.25rem}
-.form-card h2{font-size:12px;font-weight:600;color:#555;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
-.field{margin-bottom:8px}
-.field label{font-size:11px;color:#555;display:block;margin-bottom:3px}
-.field input,.field select,.field textarea{width:100%;background:#0f0f0f;border:0.5px solid #2a2a2a;border-radius:8px;padding:8px 10px;color:#e0e0e0;font-size:13px;outline:none;font-family:inherit;transition:border-color .15s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:#444}
-.field select option{background:#161616}
-.field textarea{min-height:60px;resize:vertical}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.img-preview{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-top:6px;display:none}
-.add-btn{width:100%;background:#fff;color:#000;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s}
-.add-btn:hover{background:#ddd}
-.tab-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.tab{font-size:11px;padding:5px 12px;border-radius:99px;border:0.5px solid #2a2a2a;background:transparent;color:#666;cursor:pointer;transition:all .15s}
-.tab.active{background:#fff;color:#000;border-color:#fff}
-.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-.item-card{background:#161616;border:0.5px solid #222;border-radius:12px;overflow:hidden;transition:border-color .15s}
-.item-card:hover{border-color:#333}
-.item-img{width:100%;height:160px;object-fit:cover;display:block;background:#111}
-.item-img-ph{width:100%;height:80px;background:#111;display:flex;align-items:center;justify-content:center;color:#333;font-size:11px}
-.item-body{padding:.875rem}
-.item-name{font-size:14px;font-weight:700;color:#fff;margin-bottom:5px}
-.item-meta{font-size:11px;color:#666;margin-bottom:2px}
-.item-notes{font-size:11px;color:#888;margin-top:5px;font-style:italic;border-left:2px solid #2a2a2a;padding-left:6px}
-.item-link{font-size:11px;color:#60a5fa;word-break:break-all;display:block;margin-top:5px}
-.item-profit{font-size:12px;font-weight:700;margin-top:5px}
-.item-profit.pos{color:#4ade80}.item-profit.neg{color:#f87171}
-.status-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700;margin-bottom:6px;cursor:pointer;transition:opacity .15s}
-.status-badge:hover{opacity:.75}
-.cat-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:700;margin-bottom:5px;margin-right:3px}
-.cat-hoodie{background:#0f2016;color:#4ade80}
-.cat-pant{background:#1e1040;color:#c084fc}
-.s-want{background:#1a2a3a;color:#60a5fa}
-.s-ordered{background:#2a1f00;color:#fbbf24}
-.s-sold{background:#0f2016;color:#4ade80}
-.item-actions{display:flex;gap:6px;margin-top:8px}
-.action-btn{flex:1;font-size:11px;padding:5px 8px;border-radius:6px;border:0.5px solid #2a2a2a;background:transparent;color:#888;cursor:pointer;transition:all .15s}
-.action-btn:hover{border-color:#444;color:#ccc}
-.action-btn.sold-btn{border-color:#1a3a25;color:#4ade80}
-.action-btn.sold-btn:hover{background:#0f2016}
-.del-btn-sm{font-size:11px;padding:5px 8px;border-radius:6px;border:0.5px solid #2a2a2a;background:transparent;color:#555;cursor:pointer}
-.del-btn-sm:hover{border-color:#f87171;color:#f87171}
-.empty{text-align:center;color:#333;font-size:13px;padding:3rem 0;grid-column:1/-1}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center;padding:1rem}
-.modal-bg.open{display:flex}
-.modal{background:#161616;border:0.5px solid #2a2a2a;border-radius:14px;padding:1.25rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
-.modal h3{font-size:15px;font-weight:700;margin-bottom:1rem;color:#fff}
-.modal-btns{display:flex;gap:8px;margin-top:1rem}
-.modal-btns button{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
-.save-btn{background:#fff;color:#000}.save-btn:hover{background:#ddd}
-.cancel-btn{background:#222;color:#aaa}.cancel-btn:hover{background:#2a2a2a}
-@media(max-width:480px){.stats-grid,.stats-grid2{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr 1fr}}
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #ff3c3c;
+    --accent2: #ff8c00;
+    --text: #f0f0f0;
+    --muted: #666;
+    --green: #00e676;
+    --yellow: #ffd600;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* STATS */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 20px 24px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.yellow { color: var(--yellow); }
+  .stat-value.white { color: var(--text); }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .tab {
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  .main {
+    padding: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ADD FORM */
+  .add-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group.wide { grid-column: span 2; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  select option { background: var(--surface2); }
+
+  textarea { resize: vertical; min-height: 60px; }
+
+  /* TYPE PILLS */
+  .type-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .pill:hover { border-color: var(--accent); color: var(--text); }
+  .pill.selected { background: var(--accent); border-color: var(--accent); color: white; }
+  .pill.hoodie.selected { background: #9c27b0; border-color: #9c27b0; }
+  .pill.jeans.selected { background: #1565c0; border-color: #1565c0; }
+  .pill.sweatpants.selected { background: #2e7d32; border-color: #2e7d32; }
+  .pill.cargo.selected { background: #bf360c; border-color: #bf360c; }
+  .pill.tshirt.selected { background: #00695c; border-color: #00695c; }
+  .pill.other.selected { background: #546e7a; border-color: #546e7a; }
+
+  /* SIZE SELECTOR */
+  .size-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .size-btn {
+    width: 44px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+
+  .size-btn:hover { border-color: var(--accent); color: var(--text); }
+  .size-btn.selected { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* PANTS SIZE SELECTOR */
+  .pants-size-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pants-size-btn {
+    min-width: 44px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+    padding: 0 10px;
+  }
+
+  .pants-size-btn:hover { border-color: #1565c0; color: var(--text); }
+  .pants-size-btn.selected { background: #1565c0; border-color: #1565c0; color: white; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover { background: #e63030; transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  /* TABLE */
+  .table-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+    background: var(--surface2);
+  }
+
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* TYPE BADGE */
+  .type-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-hoodie { background: rgba(156,39,176,0.2); color: #ce93d8; }
+  .badge-jeans { background: rgba(21,101,192,0.2); color: #90caf9; }
+  .badge-sweatpants { background: rgba(46,125,50,0.2); color: #a5d6a7; }
+  .badge-cargo { background: rgba(191,54,12,0.2); color: #ffab91; }
+  .badge-tshirt { background: rgba(0,105,92,0.2); color: #80cbc4; }
+  .badge-other { background: rgba(84,110,122,0.2); color: #b0bec5; }
+
+  /* STATUS BADGE */
+  .status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .status-interested { background: rgba(255,214,0,0.15); color: var(--yellow); }
+  .status-ordered { background: rgba(255,140,0,0.15); color: var(--accent2); }
+  .status-sold { background: rgba(0,230,118,0.15); color: var(--green); }
+
+  /* PROFIT */
+  .profit-positive { color: var(--green); font-weight: 600; }
+  .profit-negative { color: var(--accent); font-weight: 600; }
+
+  /* ITEM IMAGE */
+  .item-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .item-img-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
+  }
+
+  .close-btn:hover { color: var(--text); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 14px;
+    z-index: 300;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+  .toast.error { border-color: var(--accent); color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    .main { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    header { padding: 16px; }
+    table { font-size: 12px; }
+    td, th { padding: 10px 12px; }
+  }
+
+  @media (max-width: 480px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.wide { grid-column: span 1; }
+  }
 </style>
 </head>
 <body>
-<h1>Resell Tracker</h1>
 
-<div class="stats-grid">
-  <div class="metric"><div class="ml">Нийт бараа</div><div class="mv" id="s-total">0</div></div>
-  <div class="metric"><div class="ml">Нийт зардал</div><div class="mv r" id="s-cost">€0</div></div>
-  <div class="metric"><div class="ml">Нийт ашиг</div><div class="mv g" id="s-profit">€0</div></div>
-</div>
-<div class="stats-grid2">
-  <div class="metric"><div class="ml">Сонирхож</div><div class="mv b" id="s-want">0</div></div>
-  <div class="metric"><div class="ml">Захиалсан</div><div class="mv y" id="s-ordered">0</div></div>
-  <div class="metric"><div class="ml">Зарагдсан</div><div class="mv g" id="s-sold">0</div></div>
-</div>
+<header>
+  <div class="logo">RESELL TRACKER</div>
+  <div class="header-actions">
+    <span id="syncStatus" style="font-size:12px;color:var(--muted)">⏳ Connecting...</span>
+  </div>
+</header>
 
-<div class="form-card">
-  <h2>Шинэ бараа нэмэх</h2>
-  <div class="field">
-    <label>Барааны нэр</label>
-    <input type="text" id="f-name" placeholder="e.g. Crypta Celsis black hoodie">
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value white" id="statTotal">0</div>
+    <div class="stat-label">Нийт бараа</div>
   </div>
-  <div class="row2" style="margin-bottom:8px">
-    <div class="field" style="margin:0">
-      <label>Төрөл</label>
-      <select id="f-type" onchange="onTypeChange('f-type','f-subtype','f-size')">
-        <optgroup label="👕 Hoodie">
-          <option value="Hoodie">Hoodie</option>
-          <option value="Zip hoodie">Zip hoodie</option>
-          <option value="T-shirt">T-shirt</option>
-          <option value="Shirt">Shirt</option>
-          <option value="Sweatshirt">Sweatshirt</option>
-        </optgroup>
-        <optgroup label="👖 Pant">
-          <option value="Baggy jeans">Baggy jeans</option>
-          <option value="Straight jeans">Straight jeans</option>
-          <option value="Cargo pants">Cargo pants</option>
-          <option value="Sweatpants">Sweatpants</option>
-          <option value="Shorts">Shorts</option>
-        </optgroup>
-      </select>
-    </div>
-    <div class="field" style="margin:0"><label>Статус</label>
-      <select id="f-status"><option value="want">Сонирхож байна</option><option value="ordered">Захиалсан</option><option value="sold">Зарагдсан</option></select>
-    </div>
+  <div class="stat">
+    <div class="stat-value" id="statInterested">0</div>
+    <div class="stat-label">Сонирхож</div>
   </div>
-  <div class="row3" style="margin-bottom:8px">
-    <div class="field" style="margin:0"><label>Хэмжээ</label>
-      <select id="f-size">
-        <option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option><option>2XL</option>
-      </select>
-    </div>
-    <div class="field" style="margin:0"><label>Авах үнэ (€)</label>
-      <input type="number" id="f-buy" placeholder="22" min="0">
-    </div>
-    <div class="field" style="margin:0"><label>Зарах үнэ (€)</label>
-      <input type="number" id="f-sell" placeholder="65" min="0">
-    </div>
+  <div class="stat">
+    <div class="stat-value yellow" id="statOrdered">0</div>
+    <div class="stat-label">Захиалсан</div>
   </div>
-  <div class="field"><label>Өнгө</label><input type="text" id="f-color" placeholder="Black, White..."></div>
-  <div class="field"><label>Бараа линк (Weidian / DHgate)</label><input type="text" id="f-link" placeholder="https://..."></div>
-  <div class="field"><label>Зургийн URL</label>
-    <input type="text" id="f-imgurl" placeholder="https://img..." oninput="prevUrl(this.value)">
-    <img id="prev-url" class="img-preview" alt="preview">
+  <div class="stat">
+    <div class="stat-value green" id="statSold">0</div>
+    <div class="stat-label">Зарагдсан</div>
   </div>
-  <div class="field"><label>Эсвэл зураг upload</label>
-    <input type="file" id="f-img" accept="image/*" onchange="prevFile(this)">
-    <img id="prev-file" class="img-preview" alt="preview">
+  <div class="stat">
+    <div class="stat-value" id="statSpent">€0</div>
+    <div class="stat-label">Нийт зардал</div>
   </div>
-  <div class="field"><label>Notes / тэмдэглэл</label>
-    <textarea id="f-notes" placeholder="Захиалгын дугаар, хүргэлтийн мэдээлэл..."></textarea>
+  <div class="stat">
+    <div class="stat-value green" id="statProfit">€0</div>
+    <div class="stat-label">Нийт ашиг</div>
   </div>
-  <button class="add-btn" onclick="addItem()">+ Нэмэх</button>
 </div>
 
-<div class="tab-row">
-  <button class="tab active" onclick="setFilter('all',this)">Бүгд</button>
-  <button class="tab" onclick="setFilter('hoodie',this)">Hoodie</button>
-  <button class="tab" onclick="setFilter('pant',this)">Pant</button>
-  <button class="tab" onclick="setFilter('want',this)">Сонирхож байна</button>
-  <button class="tab" onclick="setFilter('ordered',this)">Захиалсан</button>
-  <button class="tab" onclick="setFilter('sold',this)">Зарагдсан</button>
+<div class="tabs">
+  <div class="tab active" onclick="filterItems('all', this)">Бүгд</div>
+  <div class="tab" onclick="filterItems('Сонирхож байна', this)">Сонирхож</div>
+  <div class="tab" onclick="filterItems('Захиалсан', this)">Захиалсан</div>
+  <div class="tab" onclick="filterItems('Зарагдсан', this)">Зарагдсан</div>
 </div>
 
-<div class="items-grid" id="list"></div>
-
-<div class="modal-bg" id="modal">
-  <div class="modal">
-    <h3>Бараа засах</h3>
-    <div class="field"><label>Барааны нэр</label><input type="text" id="e-name"></div>
-    <div class="row2" style="margin-bottom:8px">
-      <div class="field" style="margin:0"><label>Төрөл</label>
-        <select id="e-type" onchange="onTypeChange('e-type','e-subtype','e-size')">
-          <optgroup label="👕 Hoodie">
-            <option value="Hoodie">Hoodie</option>
-            <option value="Zip hoodie">Zip hoodie</option>
-            <option value="T-shirt">T-shirt</option>
-            <option value="Shirt">Shirt</option>
-            <option value="Sweatshirt">Sweatshirt</option>
-          </optgroup>
-          <optgroup label="👖 Pant">
-            <option value="Baggy jeans">Baggy jeans</option>
-            <option value="Straight jeans">Straight jeans</option>
-            <option value="Cargo pants">Cargo pants</option>
-            <option value="Sweatpants">Sweatpants</option>
-            <option value="Shorts">Shorts</option>
-          </optgroup>
-        </select>
+<div class="main">
+  <!-- ADD FORM -->
+  <div class="add-section">
+    <div class="section-title">+ Шинэ бараа нэмэх</div>
+    <div class="form-grid">
+      <div class="form-group wide">
+        <label>Барааны нэр</label>
+        <input type="text" id="f_name" placeholder="жнь: Chrome Hearts Baggy Jeans">
       </div>
-      <div class="field" style="margin:0"><label>Статус</label>
-        <select id="e-status"><option value="want">Сонирхож байна</option><option value="ordered">Захиалсан</option><option value="sold">Зарагдсан</option></select>
+
+      <div class="form-group full">
+        <label>Төрөл</label>
+        <div class="type-pills">
+          <div class="pill hoodie" onclick="selectType('Hoodie', this)">🧥 Hoodie</div>
+          <div class="pill hoodie" onclick="selectType('Zip Hoodie', this)">🤐 Zip Hoodie</div>
+          <div class="pill jeans" onclick="selectType('Baggy Jeans', this)">👖 Baggy Jeans</div>
+          <div class="pill sweatpants" onclick="selectType('Sweatpants', this)">🩳 Sweatpants</div>
+          <div class="pill cargo" onclick="selectType('Cargo Pants', this)">🎽 Cargo Pants</div>
+          <div class="pill tshirt" onclick="selectType('T-Shirt', this)">👕 T-Shirt</div>
+          <div class="pill other" onclick="selectType('Sweatshirt', this)">🫧 Sweatshirt</div>
+          <div class="pill other" onclick="selectType('Other', this)">📦 Other</div>
+        </div>
+        <input type="hidden" id="f_type">
       </div>
-    </div>
-    <div class="row3" style="margin-bottom:8px">
-      <div class="field" style="margin:0"><label>Хэмжээ</label>
-        <select id="e-size">
-          <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option>
-        </select>
-      </div>
-      <div class="field" style="margin:0"><label>Авах үнэ (€)</label><input type="number" id="e-buy" min="0"></div>
-      <div class="field" style="margin:0"><label>Зарах үнэ (€)</label><input type="number" id="e-sell" min="0"></div>
-    </div>
-    <div class="field"><label>Өнгө</label><input type="text" id="e-color"></div>
-    <div class="field"><label>Линк</label><input type="text" id="e-link"></div>
-    <div class="field"><label>Notes</label><textarea id="e-notes"></textarea></div>
-    <div class="modal-btns">
-      <button class="cancel-btn" onclick="closeModal()">Болих</button>
-      <button class="save-btn" onclick="saveEdit()">Хадгалах</button>
-    </div>
-  </div>
-</div>
 
-<script>
-const HOODIE_TYPES=['Hoodie','Zip hoodie','T-shirt','Shirt','Sweatshirt'];
-const PANT_TYPES=['Baggy jeans','Straight jeans','Cargo pants','Sweatpants','Shorts'];
-const HOODIE_SIZES=['XS','S','M','L','XL','2XL'];
-const PANT_SIZES=['XS','S','M','L','XL','2XL'];
-
-function isPant(type){return PANT_TYPES.includes(type);}
-
-function onTypeChange(typeId,subtypeId,sizeId){
-  const type=document.getElementById(typeId).value;
-  const sizeEl=document.getElementById(sizeId);
-  const sizes=isPant(type)?PANT_SIZES:HOODIE_SIZES;
-  const cur=sizeEl.value;
-  sizeEl.innerHTML=sizes.map(s=>`<option${s===cur?' selected':''}>${s}</option>`).join('');
-}
-
-let items=[];
-let filter='all';
-let editIdx=-1;
-try{items=JSON.parse(localStorage.getItem('resell_v4')||localStorage.getItem('resell_v3')||'[]');}catch(e){}
-
-function save(){try{localStorage.setItem('resell_v4',JSON.stringify(items));}catch(e){}}
-
-function prevUrl(v){const i=document.getElementById('prev-url');i.src=v;i.style.display=v?'block':'none';}
-function prevFile(input){const i=document.getElementById('prev-file');if(input.files&&input.files[0]){const r=new FileReader();r.onload=e=>{i.src=e.target.result;i.style.display='block';};r.readAsDataURL(input.files[0]);}}
-
-function catBadge(type){
-  if(isPant(type))return`<span class="cat-badge cat-pant">Pant</span>`;
-  return`<span class="cat-badge cat-hoodie">Hoodie</span>`;
-}
-
-function badge(s){
-  if(s==='want')return'<span class="status-badge s-want" title="Дарж статус солих">Сонирхож байна</span>';
-  if(s==='ordered')return'<span class="status-badge s-ordered" title="Дарж статус солих">Захиалсан</span>';
-  return'<span class="status-badge s-sold">Зарагдсан</span>';
-}
-
-function setFilter(f,el){filter=f;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');render();}
-function markSold(i){items[i].status='sold';save();render();}
-function cycleStatus(i){const s=items[i].status;items[i].status=s==='want'?'ordered':s==='ordered'?'sold':'want';save();render();}
-
-function render(){
-  const list=document.getElementById('list');
-  let filtered=items;
-  if(filter==='hoodie')filtered=items.filter(it=>!isPant(it.type));
-  else if(filter==='pant')filtered=items.filter(it=>isPant(it.type));
-  else if(filter!=='all')filtered=items.filter(it=>it.status===filter);
-  if(!filtered.length){list.innerHTML='<div class="empty">Бараа байхгүй байна.</div>';updateStats();return;}
-  list.innerHTML=filtered.map(it=>{
-    const ri=items.indexOf(it);
-    const profit=(it.sell||0)-(it.buy||0);
-    const imgHtml=it.img?`<img class="item-img" src="${it.img}" alt="${it.name}" onerror="this.style.display='none'">`:`<div class="item-img-ph">Зураг байхгүй</div>`;
-    const linkHtml=it.link?`<a class="item-link" href="${it.link}" target="_blank">${it.link.length>40?it.link.slice(0,40)+'...':it.link}</a>`:'';
-    const notesHtml=it.notes?`<div class="item-notes">${it.notes}</div>`:'';
-    const profitHtml=it.buy?`<div class="item-profit ${profit>=0?'pos':'neg'}">Ашиг: €${profit}</div>`:'';
-    const soldBtn=it.status==='ordered'?`<button class="action-btn sold-btn" onclick="markSold(${ri})">Зарагдсан</button>`:'';
-    return`<div class="item-card${isPant(it.type)?' is-pant':''}">
-      ${imgHtml}
-      <div class="item-body">
-        ${catBadge(it.type)}<div onclick="cycleStatus(${ri})" style="display:inline-block">${badge(it.status)}</div>
-        <div class="item-name">${it.name}</div>
-        <div class="item-meta">${it.type} · ${it.size} · ${it.color||'—'}</div>
-        <div class="item-meta">Авах: €${it.buy||'—'} · Зарах: €${it.sell||'—'}</div>
-        ${profitHtml}${notesHtml}${linkHtml}
-        <div class="item-actions">
-          ${soldBtn}
-          <button class="action-btn" onclick="openEdit(${ri})">Засах</button>
-          <button class="del-btn-sm" onclick="removeItem(${ri})">Устгах</button>
+      <div class="form-group full" id="clothingSizeGroup">
+        <label>Хэмжээ (Hoodie / Дээл)</label>
+        <div class="size-grid">
+          <button class="size-btn" onclick="selectSize('XS', this)">XS</button>
+          <button class="size-btn" onclick="selectSize('S', this)">S</button>
+          <button class="size-btn" onclick="selectSize('M', this)">M</button>
+          <button class="size-btn" onclick="selectSize('L', this)">L</button>
+          <button class="size-btn" onclick="selectSize('XL', this)">XL</button>
+          <button class="size-btn" onclick="selectSize('XXL', this)">XXL</button>
+          <button class="size-btn" onclick="selectSize('XXXL', this)">3XL</button>
         </div>
       </div>
-    </div>`;
-  }).join('');
+
+      <div class="form-group full" id="pantsSizeGroup" style="display:none">
+        <label>Хэмжээ (Өмд — Waist)</label>
+        <div class="pants-size-grid">
+          <button class="pants-size-btn" onclick="selectPantsSize('24', this)">24</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('25', this)">25</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('26', this)">26</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('27', this)">27</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('28', this)">28</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('29', this)">29</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('30', this)">30</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('31', this)">31</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('32', this)">32</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('S', this)">S</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('M', this)">M</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('L', this)">L</button>
+          <button class="pants-size-btn" onclick="selectPantsSize('XL', this)">XL</button>
+        </div>
+      </div>
+
+      <input type="hidden" id="f_size">
+
+      <div class="form-group">
+        <label>Статус</label>
+        <select id="f_status">
+          <option value="Сонирхож байна">Сонирхож байна</option>
+          <option value="Захиалсан">Захиалсан</option>
+          <option value="Зарагдсан">Зарагдсан</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Авах үнэ (€)</label>
+        <input type="number" id="f_buy" placeholder="0.00" step="0.01">
+      </div>
+
+      <div class="form-group">
+        <label>Зарах үнэ (€)</label>
+        <input type="number" id="f_sell" placeholder="0.00" step="0.01">
+      </div>
+
+      <div class="form-group">
+        <label>Өнгө</label>
+        <input type="text" id="f_color" placeholder="жнь: Цагаан, Хар">
+      </div>
+
+      <div class="form-group wide">
+        <label>Барааны линк (1688 / DHgate)</label>
+        <input type="url" id="f_link" placeholder="https://...">
+      </div>
+
+      <div class="form-group wide">
+        <label>Зургийн URL</label>
+        <input type="url" id="f_image" placeholder="https://...">
+      </div>
+
+      <div class="form-group full">
+        <label>Тэмдэглэл</label>
+        <textarea id="f_notes" placeholder="нэмэлт мэдээлэл..."></textarea>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; gap: 12px;">
+      <button class="btn btn-primary" onclick="addItem()">+ Нэмэх</button>
+      <button class="btn btn-outline" onclick="clearForm()">Цэвэрлэх</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-section">
+    <div class="table-header">
+      <div class="section-title" style="margin:0">Бараанууд</div>
+    </div>
+    <div id="tableContainer">
+      <div class="loading">⏳ Уншиж байна...</div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title">
+      ЗАСАХ
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="e_id">
+      <div class="form-group wide">
+        <label>Нэр</label>
+        <input type="text" id="e_name">
+      </div>
+      <div class="form-group full">
+        <label>Төрөл</label>
+        <div class="type-pills" id="editTypePills">
+          <div class="pill hoodie" onclick="selectEditType('Hoodie', this)">🧥 Hoodie</div>
+          <div class="pill hoodie" onclick="selectEditType('Zip Hoodie', this)">🤐 Zip Hoodie</div>
+          <div class="pill jeans" onclick="selectEditType('Baggy Jeans', this)">👖 Baggy Jeans</div>
+          <div class="pill sweatpants" onclick="selectEditType('Sweatpants', this)">🩳 Sweatpants</div>
+          <div class="pill cargo" onclick="selectEditType('Cargo Pants', this)">🎽 Cargo Pants</div>
+          <div class="pill tshirt" onclick="selectEditType('T-Shirt', this)">👕 T-Shirt</div>
+          <div class="pill other" onclick="selectEditType('Sweatshirt', this)">🫧 Sweatshirt</div>
+          <div class="pill other" onclick="selectEditType('Other', this)">📦 Other</div>
+        </div>
+        <input type="hidden" id="e_type">
+      </div>
+      <div class="form-group full">
+        <label>Хэмжээ</label>
+        <div class="size-grid" id="editClothingSizes">
+          <button class="size-btn" onclick="selectEditSize('XS',this)">XS</button>
+          <button class="size-btn" onclick="selectEditSize('S',this)">S</button>
+          <button class="size-btn" onclick="selectEditSize('M',this)">M</button>
+          <button class="size-btn" onclick="selectEditSize('L',this)">L</button>
+          <button class="size-btn" onclick="selectEditSize('XL',this)">XL</button>
+          <button class="size-btn" onclick="selectEditSize('XXL',this)">XXL</button>
+        </div>
+        <div class="pants-size-grid" id="editPantsSizes" style="display:none;margin-top:8px">
+          <button class="pants-size-btn" onclick="selectEditSize('24',this)">24</button>
+          <button class="pants-size-btn" onclick="selectEditSize('25',this)">25</button>
+          <button class="pants-size-btn" onclick="selectEditSize('26',this)">26</button>
+          <button class="pants-size-btn" onclick="selectEditSize('27',this)">27</button>
+          <button class="pants-size-btn" onclick="selectEditSize('28',this)">28</button>
+          <button class="pants-size-btn" onclick="selectEditSize('29',this)">29</button>
+          <button class="pants-size-btn" onclick="selectEditSize('30',this)">30</button>
+          <button class="pants-size-btn" onclick="selectEditSize('31',this)">31</button>
+          <button class="pants-size-btn" onclick="selectEditSize('32',this)">32</button>
+          <button class="pants-size-btn" onclick="selectEditSize('S',this)">S</button>
+          <button class="pants-size-btn" onclick="selectEditSize('M',this)">M</button>
+          <button class="pants-size-btn" onclick="selectEditSize('L',this)">L</button>
+          <button class="pants-size-btn" onclick="selectEditSize('XL',this)">XL</button>
+        </div>
+        <input type="hidden" id="e_size">
+      </div>
+      <div class="form-group">
+        <label>Статус</label>
+        <select id="e_status">
+          <option value="Сонирхож байна">Сонирхож байна</option>
+          <option value="Захиалсан">Захиалсан</option>
+          <option value="Зарагдсан">Зарагдсан</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Авах үнэ (€)</label>
+        <input type="number" id="e_buy" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Зарах үнэ (€)</label>
+        <input type="number" id="e_sell" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Өнгө</label>
+        <input type="text" id="e_color">
+      </div>
+      <div class="form-group wide">
+        <label>Линк</label>
+        <input type="url" id="e_link">
+      </div>
+      <div class="form-group wide">
+        <label>Зургийн URL</label>
+        <input type="url" id="e_image">
+      </div>
+      <div class="form-group full">
+        <label>Тэмдэглэл</label>
+        <textarea id="e_notes"></textarea>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:12px;">
+      <button class="btn btn-primary" onclick="saveEdit()">Хадгалах</button>
+      <button class="btn btn-outline" onclick="closeModal()">Болих</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://ojhxronriwrilvpzrgyx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qaHhyb25yaXdyaWx2cHpyZ3l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNzAyNjIsImV4cCI6MjA5MTc0NjI2Mn0.zDIWzWbska_chSO_jZ0HIo4Rlu_mtqSCgruNAe_oW9A';
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allItems = [];
+let currentFilter = 'all';
+const pantsTypes = ['Baggy Jeans', 'Sweatpants', 'Cargo Pants'];
+
+// INIT
+async function init() {
+  try {
+    await loadItems();
+    document.getElementById('syncStatus').textContent = '🟢 Synced';
+  } catch(e) {
+    document.getElementById('syncStatus').textContent = '🔴 Error';
+    showToast('Холболт амжилтгүй', 'error');
+  }
+}
+
+async function loadItems() {
+  const { data, error } = await db.from('items').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  allItems = data || [];
+  renderTable();
   updateStats();
 }
 
-function updateStats(){
-  const total=items.length;
-  const cost=items.reduce((a,b)=>a+(+b.buy||0),0);
-  const soldItems=items.filter(i=>i.status==='sold');
-  const profit=soldItems.reduce((a,b)=>a+((+b.sell||0)-(+b.buy||0)),0);
-  const want=items.filter(i=>i.status==='want').length;
-  const ordered=items.filter(i=>i.status==='ordered').length;
-  const sold=soldItems.length;
-  document.getElementById('s-total').textContent=total;
-  document.getElementById('s-cost').textContent='€'+cost;
-  const pel=document.getElementById('s-profit');
-  pel.textContent=(profit>=0?'€':'−€')+Math.abs(profit);
-  pel.className='mv '+(profit>=0?'g':'r');
-  document.getElementById('s-want').textContent=want;
-  document.getElementById('s-ordered').textContent=ordered;
-  document.getElementById('s-sold').textContent=sold;
+function isPants(type) {
+  return pantsTypes.includes(type);
 }
 
-function addItem(){
-  const name=document.getElementById('f-name').value.trim();
-  if(!name){alert('Барааны нэр оруулна уу.');return;}
-  const fileImg=document.getElementById('prev-file').src;
-  const urlImg=document.getElementById('f-imgurl').value.trim();
-  const img=fileImg&&fileImg!==window.location.href?fileImg:(urlImg||'');
-  items.unshift({name,type:document.getElementById('f-type').value,status:document.getElementById('f-status').value,size:document.getElementById('f-size').value,color:document.getElementById('f-color').value.trim(),buy:parseFloat(document.getElementById('f-buy').value)||0,sell:parseFloat(document.getElementById('f-sell').value)||0,link:document.getElementById('f-link').value.trim(),notes:document.getElementById('f-notes').value.trim(),img});
-  save();render();
-  ['f-name','f-color','f-buy','f-sell','f-link','f-imgurl','f-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('prev-file').style.display='none';
-  document.getElementById('prev-url').style.display='none';
-  document.getElementById('f-img').value='';
+function renderTable() {
+  const filtered = currentFilter === 'all' ? allItems : allItems.filter(i => i.status === currentFilter);
+  const container = document.getElementById('tableContainer');
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">📦</div>
+        <h3>Бараа байхгүй байна</h3>
+        <p>Дээрх формоор шинэ бараа нэм</p>
+      </div>`;
+    return;
+  }
+
+  const rows = filtered.map(item => {
+    const profit = (item.sell_price || 0) - (item.buy_price || 0);
+    const profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
+    const typeClass = (item.type || 'other').toLowerCase().replace(' ', '-');
+    const badgeClass = getBadgeClass(item.type);
+    const statusClass = getStatusClass(item.status);
+    const img = item.image_url
+      ? `<img src="${item.image_url}" class="item-img" onerror="this.style.display='none'">`
+      : `<div class="item-img-placeholder">${getTypeEmoji(item.type)}</div>`;
+
+    return `<tr>
+      <td>${img}</td>
+      <td>
+        <div style="font-weight:600">${item.name || '-'}</div>
+        ${item.notes ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">${item.notes}</div>` : ''}
+      </td>
+      <td><span class="type-badge ${badgeClass}">${item.type || '-'}</span></td>
+      <td><span class="status-badge ${statusClass}">${item.status || '-'}</span></td>
+      <td><span style="background:var(--surface2);padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600">${item.size || '-'}</span></td>
+      <td>€${(item.buy_price || 0).toFixed(2)}</td>
+      <td>€${(item.sell_price || 0).toFixed(2)}</td>
+      <td class="${profitClass}">€${profit.toFixed(2)}</td>
+      <td>${item.color || '-'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline btn-sm">🔗</a>` : ''}
+          <button class="btn btn-outline btn-sm" onclick="openEdit('${item.id}')">✏️</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--accent)" onclick="deleteItem('${item.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Нэр</th>
+          <th>Төрөл</th>
+          <th>Статус</th>
+          <th>Хэмжээ</th>
+          <th>Авах €</th>
+          <th>Зарах €</th>
+          <th>Ашиг</th>
+          <th>Өнгө</th>
+          <th>Үйлдэл</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    </div>`;
 }
 
-function removeItem(i){if(confirm('Устгах уу?')){items.splice(i,1);save();render();}}
-
-function openEdit(i){
-  editIdx=i;
-  const it=items[i];
-  document.getElementById('e-name').value=it.name;
-  document.getElementById('e-type').value=it.type;
-  document.getElementById('e-status').value=it.status;
-  onTypeChange('e-type','e-subtype','e-size');
-  document.getElementById('e-size').value=it.size;
-  document.getElementById('e-buy').value=it.buy||'';
-  document.getElementById('e-sell').value=it.sell||'';
-  document.getElementById('e-color').value=it.color||'';
-  document.getElementById('e-link').value=it.link||'';
-  document.getElementById('e-notes').value=it.notes||'';
-  document.getElementById('modal').classList.add('open');
+function getBadgeClass(type) {
+  const map = {
+    'Hoodie': 'badge-hoodie', 'Zip Hoodie': 'badge-hoodie',
+    'Baggy Jeans': 'badge-jeans',
+    'Sweatpants': 'badge-sweatpants',
+    'Cargo Pants': 'badge-cargo',
+    'T-Shirt': 'badge-tshirt',
+  };
+  return map[type] || 'badge-other';
 }
 
-function closeModal(){document.getElementById('modal').classList.remove('open');editIdx=-1;}
-
-function saveEdit(){
-  if(editIdx<0)return;
-  const it=items[editIdx];
-  it.name=document.getElementById('e-name').value.trim()||it.name;
-  it.type=document.getElementById('e-type').value;
-  it.status=document.getElementById('e-status').value;
-  it.size=document.getElementById('e-size').value;
-  it.buy=parseFloat(document.getElementById('e-buy').value)||0;
-  it.sell=parseFloat(document.getElementById('e-sell').value)||0;
-  it.color=document.getElementById('e-color').value.trim();
-  it.link=document.getElementById('e-link').value.trim();
-  it.notes=document.getElementById('e-notes').value.trim();
-  save();render();closeModal();
+function getStatusClass(status) {
+  if (status === 'Зарагдсан') return 'status-sold';
+  if (status === 'Захиалсан') return 'status-ordered';
+  return 'status-interested';
 }
 
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-render();
+function getTypeEmoji(type) {
+  const map = { 'Hoodie':'🧥','Zip Hoodie':'🤐','Baggy Jeans':'👖','Sweatpants':'🩳','Cargo Pants':'🎽','T-Shirt':'👕','Sweatshirt':'🫧' };
+  return map[type] || '📦';
+}
+
+function updateStats() {
+  const total = allItems.length;
+  const interested = allItems.filter(i => i.status === 'Сонирхож байна').length;
+  const ordered = allItems.filter(i => i.status === 'Захиалсан').length;
+  const sold = allItems.filter(i => i.status === 'Зарагдсан').length;
+  const spent = allItems.reduce((s,i) => s + (i.buy_price||0), 0);
+  const profit = allItems.filter(i=>i.status==='Зарагдсан').reduce((s,i) => s + ((i.sell_price||0)-(i.buy_price||0)), 0);
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statInterested').textContent = interested;
+  document.getElementById('statOrdered').textContent = ordered;
+  document.getElementById('statSold').textContent = sold;
+  document.getElementById('statSpent').textContent = `€${spent.toFixed(0)}`;
+  document.getElementById('statProfit').textContent = `€${profit.toFixed(0)}`;
+}
+
+// TYPE SELECTION
+let selectedType = '';
+function selectType(type, el) {
+  document.querySelectorAll('.type-pills .pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedType = type;
+  document.getElementById('f_type').value = type;
+  // Show/hide size groups
+  const isPantsType = isPants(type);
+  document.getElementById('clothingSizeGroup').style.display = isPantsType ? 'none' : 'block';
+  document.getElementById('pantsSizeGroup').style.display = isPantsType ? 'block' : 'none';
+  document.getElementById('f_size').value = '';
+  document.querySelectorAll('.size-btn, .pants-size-btn').forEach(b => b.classList.remove('selected'));
+}
+
+let selectedSize = '';
+function selectSize(size, el) {
+  document.querySelectorAll('#clothingSizeGroup .size-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSize = size;
+  document.getElementById('f_size').value = size;
+}
+
+function selectPantsSize(size, el) {
+  document.querySelectorAll('#pantsSizeGroup .pants-size-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSize = size;
+  document.getElementById('f_size').value = size;
+}
+
+// ADD ITEM
+async function addItem() {
+  const name = document.getElementById('f_name').value.trim();
+  if (!name) { showToast('Барааны нэр оруулна уу', 'error'); return; }
+
+  const item = {
+    name,
+    type: document.getElementById('f_type').value || 'Other',
+    status: document.getElementById('f_status').value,
+    size: document.getElementById('f_size').value,
+    buy_price: parseFloat(document.getElementById('f_buy').value) || 0,
+    sell_price: parseFloat(document.getElementById('f_sell').value) || 0,
+    color: document.getElementById('f_color').value,
+    link: document.getElementById('f_link').value,
+    image_url: document.getElementById('f_image').value,
+    notes: document.getElementById('f_notes').value,
+  };
+
+  const { error } = await db.from('items').insert([item]);
+  if (error) { showToast('Алдаа гарлаа', 'error'); return; }
+
+  showToast('✅ Бараа нэмэгдлээ!', 'success');
+  clearForm();
+  await loadItems();
+}
+
+function clearForm() {
+  ['f_name','f_type','f_size','f_buy','f_sell','f_color','f_link','f_image','f_notes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.querySelectorAll('.type-pills .pill, .size-btn, .pants-size-btn').forEach(el => el.classList.remove('selected'));
+  selectedType = '';
+  selectedSize = '';
+  document.getElementById('clothingSizeGroup').style.display = 'block';
+  document.getElementById('pantsSizeGroup').style.display = 'none';
+}
+
+// FILTER
+function filterItems(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
+// DELETE
+async function deleteItem(id) {
+  if (!confirm('Устгах уу?')) return;
+  const { error } = await db.from('items').delete().eq('id', id);
+  if (error) { showToast('Алдаа гарлаа', 'error'); return; }
+  showToast('🗑️ Устгагдлаа', 'success');
+  await loadItems();
+}
+
+// EDIT
+let editType = '';
+let editSize = '';
+
+function openEdit(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+
+  document.getElementById('e_id').value = item.id;
+  document.getElementById('e_name').value = item.name || '';
+  document.getElementById('e_status').value = item.status || 'Сонирхож байна';
+  document.getElementById('e_buy').value = item.buy_price || '';
+  document.getElementById('e_sell').value = item.sell_price || '';
+  document.getElementById('e_color').value = item.color || '';
+  document.getElementById('e_link').value = item.link || '';
+  document.getElementById('e_image').value = item.image_url || '';
+  document.getElementById('e_notes').value = item.notes || '';
+  document.getElementById('e_type').value = item.type || '';
+  document.getElementById('e_size').value = item.size || '';
+
+  editType = item.type || '';
+  editSize = item.size || '';
+
+  // Set type pill
+  document.querySelectorAll('#editTypePills .pill').forEach(p => {
+    p.classList.toggle('selected', p.textContent.includes(item.type));
+  });
+
+  // Show correct size grid
+  const pantsType = isPants(item.type);
+  document.getElementById('editClothingSizes').style.display = pantsType ? 'none' : 'flex';
+  document.getElementById('editPantsSizes').style.display = pantsType ? 'flex' : 'none';
+
+  // Select current size
+  document.querySelectorAll('#editClothingSizes .size-btn, #editPantsSizes .pants-size-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent === item.size);
+  });
+
+  document.getElementById('editModal').classList.add('open');
+}
+
+function selectEditType(type, el) {
+  document.querySelectorAll('#editTypePills .pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  editType = type;
+  document.getElementById('e_type').value = type;
+  const pantsType = isPants(type);
+  document.getElementById('editClothingSizes').style.display = pantsType ? 'none' : 'flex';
+  document.getElementById('editPantsSizes').style.display = pantsType ? 'flex' : 'none';
+  document.getElementById('e_size').value = '';
+  document.querySelectorAll('#editClothingSizes .size-btn, #editPantsSizes .pants-size-btn').forEach(b => b.classList.remove('selected'));
+}
+
+function selectEditSize(size, el) {
+  document.querySelectorAll('#editClothingSizes .size-btn, #editPantsSizes .pants-size-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('e_size').value = size;
+}
+
+async function saveEdit() {
+  const id = document.getElementById('e_id').value;
+  const updated = {
+    name: document.getElementById('e_name').value,
+    type: document.getElementById('e_type').value,
+    status: document.getElementById('e_status').value,
+    size: document.getElementById('e_size').value,
+    buy_price: parseFloat(document.getElementById('e_buy').value) || 0,
+    sell_price: parseFloat(document.getElementById('e_sell').value) || 0,
+    color: document.getElementById('e_color').value,
+    link: document.getElementById('e_link').value,
+    image_url: document.getElementById('e_image').value,
+    notes: document.getElementById('e_notes').value,
+  };
+
+  const { error } = await db.from('items').update(updated).eq('id', id);
+  if (error) { showToast('Алдаа гарлаа', 'error'); return; }
+
+  showToast('✅ Хадгалагдлаа!', 'success');
+  closeModal();
+  await loadItems();
+}
+
+function closeModal() {
+  document.getElementById('editModal').classList.remove('open');
+}
+
+// TOAST
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Close modal on overlay click
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+init();
 </script>
 </body>
 </html>
