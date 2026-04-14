@@ -29,7 +29,6 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
   header {
     border-bottom: 1px solid var(--border);
     padding: 20px 32px;
@@ -52,13 +51,6 @@
     -webkit-text-fill-color: transparent;
   }
 
-  .header-actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-
-  /* STATS */
   .stats-bar {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -92,7 +84,6 @@
     margin-top: 4px;
   }
 
-  /* TABS */
   .tabs {
     display: flex;
     gap: 0;
@@ -116,14 +107,12 @@
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-  /* MAIN */
   .main {
     padding: 32px;
     max-width: 1400px;
     margin: 0 auto;
   }
 
-  /* ADD FORM */
   .add-section {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -185,15 +174,27 @@
     outline: none;
   }
 
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-  }
-
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   select option { background: var(--surface2); }
-
   textarea { resize: vertical; min-height: 60px; }
 
-  /* TYPE PILLS */
+  input[type="file"] {
+    padding: 8px 14px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .img-preview {
+    width: 100%;
+    max-height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 6px;
+    display: none;
+    border: 1px solid var(--border);
+  }
+
   .type-pills {
     display: flex;
     gap: 8px;
@@ -212,15 +213,11 @@
   }
 
   .pill:hover { border-color: var(--accent); color: var(--text); }
-  .pill.selected { background: var(--accent); border-color: var(--accent); color: white; }
-  .pill.hoodie.selected { background: #9c27b0; border-color: #9c27b0; }
-  .pill.jeans.selected { background: #1565c0; border-color: #1565c0; }
-  .pill.sweatpants.selected { background: #2e7d32; border-color: #2e7d32; }
-  .pill.cargo.selected { background: #bf360c; border-color: #bf360c; }
-  .pill.tshirt.selected { background: #00695c; border-color: #00695c; }
-  .pill.other.selected { background: #546e7a; border-color: #546e7a; }
+  .pill.hoodie.selected { background: #9c27b0; border-color: #9c27b0; color: white; }
+  .pill.jeans.selected  { background: #1565c0; border-color: #1565c0; color: white; }
+  .pill.sweatpants.selected { background: #2e7d32; border-color: #2e7d32; color: white; }
+  .pill.cargo.selected  { background: #bf360c; border-color: #bf360c; color: white; }
 
-  /* SIZE SELECTOR */
   .size-grid {
     display: flex;
     gap: 8px;
@@ -228,29 +225,6 @@
   }
 
   .size-btn {
-    width: 44px;
-    height: 36px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 600;
-  }
-
-  .size-btn:hover { border-color: var(--accent); color: var(--text); }
-  .size-btn.selected { background: var(--accent); border-color: var(--accent); color: white; }
-
-  /* PANTS SIZE SELECTOR */
-  .pants-size-grid {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .pants-size-btn {
     min-width: 44px;
     height: 36px;
     border-radius: 6px;
@@ -264,10 +238,9 @@
     padding: 0 10px;
   }
 
-  .pants-size-btn:hover { border-color: #1565c0; color: var(--text); }
-  .pants-size-btn.selected { background: #1565c0; border-color: #1565c0; color: white; }
+  .size-btn:hover { border-color: var(--accent); color: var(--text); }
+  .size-btn.selected { background: var(--accent); border-color: var(--accent); color: white; }
 
-  /* BUTTONS */
   .btn {
     padding: 12px 24px;
     border-radius: 8px;
@@ -282,28 +255,12 @@
     gap: 8px;
   }
 
-  .btn-primary {
-    background: var(--accent);
-    color: white;
-  }
-
+  .btn-primary { background: var(--accent); color: white; }
   .btn-primary:hover { background: #e63030; transform: translateY(-1px); }
-
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
 
-  .btn-sm {
-    padding: 6px 12px;
-    font-size: 12px;
-    border-radius: 6px;
-  }
-
-  /* TABLE */
   .table-section {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -319,10 +276,7 @@
     border-bottom: 1px solid var(--border);
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+  table { width: 100%; border-collapse: collapse; }
 
   th {
     padding: 12px 16px;
@@ -346,7 +300,6 @@
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(255,255,255,0.02); }
 
-  /* TYPE BADGE */
   .type-badge {
     padding: 4px 10px;
     border-radius: 12px;
@@ -356,14 +309,11 @@
     letter-spacing: 0.5px;
   }
 
-  .badge-hoodie { background: rgba(156,39,176,0.2); color: #ce93d8; }
-  .badge-jeans { background: rgba(21,101,192,0.2); color: #90caf9; }
-  .badge-sweatpants { background: rgba(46,125,50,0.2); color: #a5d6a7; }
-  .badge-cargo { background: rgba(191,54,12,0.2); color: #ffab91; }
-  .badge-tshirt { background: rgba(0,105,92,0.2); color: #80cbc4; }
-  .badge-other { background: rgba(84,110,122,0.2); color: #b0bec5; }
+  .badge-hoodie    { background: rgba(156,39,176,0.2); color: #ce93d8; }
+  .badge-jeans     { background: rgba(21,101,192,0.2); color: #90caf9; }
+  .badge-sweatpants{ background: rgba(46,125,50,0.2);  color: #a5d6a7; }
+  .badge-cargo     { background: rgba(191,54,12,0.2);  color: #ffab91; }
 
-  /* STATUS BADGE */
   .status-badge {
     padding: 4px 10px;
     border-radius: 12px;
@@ -372,14 +322,12 @@
   }
 
   .status-interested { background: rgba(255,214,0,0.15); color: var(--yellow); }
-  .status-ordered { background: rgba(255,140,0,0.15); color: var(--accent2); }
-  .status-sold { background: rgba(0,230,118,0.15); color: var(--green); }
+  .status-ordered    { background: rgba(255,140,0,0.15); color: var(--accent2); }
+  .status-sold       { background: rgba(0,230,118,0.15); color: var(--green); }
 
-  /* PROFIT */
   .profit-positive { color: var(--green); font-weight: 600; }
   .profit-negative { color: var(--accent); font-weight: 600; }
 
-  /* ITEM IMAGE */
   .item-img {
     width: 44px;
     height: 44px;
@@ -401,7 +349,6 @@
     font-size: 18px;
   }
 
-  /* EMPTY STATE */
   .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -411,14 +358,8 @@
   .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
   .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
 
-  /* LOADING */
-  .loading {
-    text-align: center;
-    padding: 40px;
-    color: var(--muted);
-  }
+  .loading { text-align: center; padding: 40px; color: var(--muted); }
 
-  /* MODAL */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -465,7 +406,6 @@
 
   .close-btn:hover { color: var(--text); }
 
-  /* TOAST */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -488,7 +428,6 @@
   .toast.success { border-color: var(--green); color: var(--green); }
   .toast.error { border-color: var(--accent); color: var(--accent); }
 
-  /* RESPONSIVE */
   @media (max-width: 768px) {
     .stats-bar { grid-template-columns: repeat(3, 1fr); }
     .main { padding: 16px; }
@@ -500,7 +439,7 @@
 
   @media (max-width: 480px) {
     .stats-bar { grid-template-columns: repeat(2, 1fr); }
-    .form-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-column: 1; }
     .form-group.wide { grid-column: span 1; }
   }
 </style>
@@ -553,9 +492,10 @@
   <div class="add-section">
     <div class="section-title">+ Шинэ бараа нэмэх</div>
     <div class="form-grid">
+
       <div class="form-group wide">
         <label>Барааны нэр</label>
-        <input type="text" id="f_name" placeholder="жнь: Chrome Hearts Baggy Jeans">
+        <input type="text" id="f_name" placeholder="жнь: Sp5der Pink Hoodie">
       </div>
 
       <div class="form-group full">
@@ -566,46 +506,22 @@
           <div class="pill jeans" onclick="selectType('Baggy Jeans', this)">👖 Baggy Jeans</div>
           <div class="pill sweatpants" onclick="selectType('Sweatpants', this)">🩳 Sweatpants</div>
           <div class="pill cargo" onclick="selectType('Cargo Pants', this)">🎽 Cargo Pants</div>
-          <div class="pill tshirt" onclick="selectType('T-Shirt', this)">👕 T-Shirt</div>
-          <div class="pill other" onclick="selectType('Sweatshirt', this)">🫧 Sweatshirt</div>
-          <div class="pill other" onclick="selectType('Other', this)">📦 Other</div>
         </div>
         <input type="hidden" id="f_type">
       </div>
 
-      <div class="form-group full" id="clothingSizeGroup">
-        <label>Хэмжээ (Hoodie / Дээл)</label>
-        <div class="size-grid">
+      <div class="form-group full">
+        <label>Хэмжээ</label>
+        <div class="size-grid" id="f_sizeGrid">
           <button class="size-btn" onclick="selectSize('XS', this)">XS</button>
           <button class="size-btn" onclick="selectSize('S', this)">S</button>
           <button class="size-btn" onclick="selectSize('M', this)">M</button>
           <button class="size-btn" onclick="selectSize('L', this)">L</button>
           <button class="size-btn" onclick="selectSize('XL', this)">XL</button>
           <button class="size-btn" onclick="selectSize('XXL', this)">XXL</button>
-          <button class="size-btn" onclick="selectSize('XXXL', this)">3XL</button>
         </div>
+        <input type="hidden" id="f_size">
       </div>
-
-      <div class="form-group full" id="pantsSizeGroup" style="display:none">
-        <label>Хэмжээ (Өмд — Waist)</label>
-        <div class="pants-size-grid">
-          <button class="pants-size-btn" onclick="selectPantsSize('24', this)">24</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('25', this)">25</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('26', this)">26</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('27', this)">27</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('28', this)">28</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('29', this)">29</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('30', this)">30</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('31', this)">31</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('32', this)">32</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('S', this)">S</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('M', this)">M</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('L', this)">L</button>
-          <button class="pants-size-btn" onclick="selectPantsSize('XL', this)">XL</button>
-        </div>
-      </div>
-
-      <input type="hidden" id="f_size">
 
       <div class="form-group">
         <label>Статус</label>
@@ -628,17 +544,18 @@
 
       <div class="form-group">
         <label>Өнгө</label>
-        <input type="text" id="f_color" placeholder="жнь: Цагаан, Хар">
+        <input type="text" id="f_color" placeholder="жнь: Pink, Black">
       </div>
 
       <div class="form-group wide">
-        <label>Барааны линк (1688 / DHgate)</label>
+        <label>Барааны линк</label>
         <input type="url" id="f_link" placeholder="https://...">
       </div>
 
       <div class="form-group wide">
-        <label>Зургийн URL</label>
-        <input type="url" id="f_image" placeholder="https://...">
+        <label>Зураг (file)</label>
+        <input type="file" id="f_image" accept="image/*" onchange="previewFile(this, 'f_preview')">
+        <img id="f_preview" class="img-preview" alt="preview">
       </div>
 
       <div class="form-group full">
@@ -673,10 +590,12 @@
     </div>
     <div class="form-grid">
       <input type="hidden" id="e_id">
+
       <div class="form-group wide">
         <label>Нэр</label>
         <input type="text" id="e_name">
       </div>
+
       <div class="form-group full">
         <label>Төрөл</label>
         <div class="type-pills" id="editTypePills">
@@ -685,15 +604,13 @@
           <div class="pill jeans" onclick="selectEditType('Baggy Jeans', this)">👖 Baggy Jeans</div>
           <div class="pill sweatpants" onclick="selectEditType('Sweatpants', this)">🩳 Sweatpants</div>
           <div class="pill cargo" onclick="selectEditType('Cargo Pants', this)">🎽 Cargo Pants</div>
-          <div class="pill tshirt" onclick="selectEditType('T-Shirt', this)">👕 T-Shirt</div>
-          <div class="pill other" onclick="selectEditType('Sweatshirt', this)">🫧 Sweatshirt</div>
-          <div class="pill other" onclick="selectEditType('Other', this)">📦 Other</div>
         </div>
         <input type="hidden" id="e_type">
       </div>
+
       <div class="form-group full">
         <label>Хэмжээ</label>
-        <div class="size-grid" id="editClothingSizes">
+        <div class="size-grid" id="e_sizeGrid">
           <button class="size-btn" onclick="selectEditSize('XS',this)">XS</button>
           <button class="size-btn" onclick="selectEditSize('S',this)">S</button>
           <button class="size-btn" onclick="selectEditSize('M',this)">M</button>
@@ -701,23 +618,9 @@
           <button class="size-btn" onclick="selectEditSize('XL',this)">XL</button>
           <button class="size-btn" onclick="selectEditSize('XXL',this)">XXL</button>
         </div>
-        <div class="pants-size-grid" id="editPantsSizes" style="display:none;margin-top:8px">
-          <button class="pants-size-btn" onclick="selectEditSize('24',this)">24</button>
-          <button class="pants-size-btn" onclick="selectEditSize('25',this)">25</button>
-          <button class="pants-size-btn" onclick="selectEditSize('26',this)">26</button>
-          <button class="pants-size-btn" onclick="selectEditSize('27',this)">27</button>
-          <button class="pants-size-btn" onclick="selectEditSize('28',this)">28</button>
-          <button class="pants-size-btn" onclick="selectEditSize('29',this)">29</button>
-          <button class="pants-size-btn" onclick="selectEditSize('30',this)">30</button>
-          <button class="pants-size-btn" onclick="selectEditSize('31',this)">31</button>
-          <button class="pants-size-btn" onclick="selectEditSize('32',this)">32</button>
-          <button class="pants-size-btn" onclick="selectEditSize('S',this)">S</button>
-          <button class="pants-size-btn" onclick="selectEditSize('M',this)">M</button>
-          <button class="pants-size-btn" onclick="selectEditSize('L',this)">L</button>
-          <button class="pants-size-btn" onclick="selectEditSize('XL',this)">XL</button>
-        </div>
         <input type="hidden" id="e_size">
       </div>
+
       <div class="form-group">
         <label>Статус</label>
         <select id="e_status">
@@ -726,26 +629,33 @@
           <option value="Зарагдсан">Зарагдсан</option>
         </select>
       </div>
+
       <div class="form-group">
         <label>Авах үнэ (€)</label>
         <input type="number" id="e_buy" step="0.01">
       </div>
+
       <div class="form-group">
         <label>Зарах үнэ (€)</label>
         <input type="number" id="e_sell" step="0.01">
       </div>
+
       <div class="form-group">
         <label>Өнгө</label>
         <input type="text" id="e_color">
       </div>
+
       <div class="form-group wide">
         <label>Линк</label>
         <input type="url" id="e_link">
       </div>
+
       <div class="form-group wide">
-        <label>Зургийн URL</label>
-        <input type="url" id="e_image">
+        <label>Зураг солих (file)</label>
+        <input type="file" id="e_image" accept="image/*" onchange="previewFile(this, 'e_preview')">
+        <img id="e_preview" class="img-preview" alt="preview">
       </div>
+
       <div class="form-group full">
         <label>Тэмдэглэл</label>
         <textarea id="e_notes"></textarea>
@@ -758,7 +668,6 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -769,9 +678,30 @@ const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let allItems = [];
 let currentFilter = 'all';
-const pantsTypes = ['Baggy Jeans', 'Sweatpants', 'Cargo Pants'];
 
-// INIT
+// Зураг preview
+function previewFile(input, previewId) {
+  const preview = document.getElementById(previewId);
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// File → base64
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 async function init() {
   try {
     await loadItems();
@@ -788,10 +718,6 @@ async function loadItems() {
   allItems = data || [];
   renderTable();
   updateStats();
-}
-
-function isPants(type) {
-  return pantsTypes.includes(type);
 }
 
 function renderTable() {
@@ -811,7 +737,6 @@ function renderTable() {
   const rows = filtered.map(item => {
     const profit = (item.sell_price || 0) - (item.buy_price || 0);
     const profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
-    const typeClass = (item.type || 'other').toLowerCase().replace(' ', '-');
     const badgeClass = getBadgeClass(item.type);
     const statusClass = getStatusClass(item.status);
     const img = item.image_url
@@ -864,14 +789,11 @@ function renderTable() {
 }
 
 function getBadgeClass(type) {
-  const map = {
-    'Hoodie': 'badge-hoodie', 'Zip Hoodie': 'badge-hoodie',
-    'Baggy Jeans': 'badge-jeans',
-    'Sweatpants': 'badge-sweatpants',
-    'Cargo Pants': 'badge-cargo',
-    'T-Shirt': 'badge-tshirt',
-  };
-  return map[type] || 'badge-other';
+  if (type === 'Hoodie' || type === 'Zip Hoodie') return 'badge-hoodie';
+  if (type === 'Baggy Jeans') return 'badge-jeans';
+  if (type === 'Sweatpants') return 'badge-sweatpants';
+  if (type === 'Cargo Pants') return 'badge-cargo';
+  return 'badge-hoodie';
 }
 
 function getStatusClass(status) {
@@ -881,7 +803,7 @@ function getStatusClass(status) {
 }
 
 function getTypeEmoji(type) {
-  const map = { 'Hoodie':'🧥','Zip Hoodie':'🤐','Baggy Jeans':'👖','Sweatpants':'🩳','Cargo Pants':'🎽','T-Shirt':'👕','Sweatshirt':'🫧' };
+  const map = { 'Hoodie':'🧥','Zip Hoodie':'🤐','Baggy Jeans':'👖','Sweatpants':'🩳','Cargo Pants':'🎽' };
   return map[type] || '📦';
 }
 
@@ -901,33 +823,19 @@ function updateStats() {
   document.getElementById('statProfit').textContent = `€${profit.toFixed(0)}`;
 }
 
-// TYPE SELECTION
-let selectedType = '';
+// TYPE SELECTION — add form
 function selectType(type, el) {
-  document.querySelectorAll('.type-pills .pill').forEach(p => p.classList.remove('selected'));
+  document.querySelectorAll('.add-section .type-pills .pill').forEach(p => p.classList.remove('selected'));
   el.classList.add('selected');
-  selectedType = type;
   document.getElementById('f_type').value = type;
-  // Show/hide size groups
-  const isPantsType = isPants(type);
-  document.getElementById('clothingSizeGroup').style.display = isPantsType ? 'none' : 'block';
-  document.getElementById('pantsSizeGroup').style.display = isPantsType ? 'block' : 'none';
   document.getElementById('f_size').value = '';
-  document.querySelectorAll('.size-btn, .pants-size-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
 }
 
-let selectedSize = '';
+// SIZE SELECTION — add form
 function selectSize(size, el) {
-  document.querySelectorAll('#clothingSizeGroup .size-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
-  selectedSize = size;
-  document.getElementById('f_size').value = size;
-}
-
-function selectPantsSize(size, el) {
-  document.querySelectorAll('#pantsSizeGroup .pants-size-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedSize = size;
   document.getElementById('f_size').value = size;
 }
 
@@ -936,21 +844,27 @@ async function addItem() {
   const name = document.getElementById('f_name').value.trim();
   if (!name) { showToast('Барааны нэр оруулна уу', 'error'); return; }
 
+  let imageData = '';
+  const fileInput = document.getElementById('f_image');
+  if (fileInput.files && fileInput.files[0]) {
+    imageData = await fileToBase64(fileInput.files[0]);
+  }
+
   const item = {
     name,
-    type: document.getElementById('f_type').value || 'Other',
+    type: document.getElementById('f_type').value || 'Hoodie',
     status: document.getElementById('f_status').value,
     size: document.getElementById('f_size').value,
     buy_price: parseFloat(document.getElementById('f_buy').value) || 0,
     sell_price: parseFloat(document.getElementById('f_sell').value) || 0,
     color: document.getElementById('f_color').value,
     link: document.getElementById('f_link').value,
-    image_url: document.getElementById('f_image').value,
+    image_url: imageData,
     notes: document.getElementById('f_notes').value,
   };
 
   const { error } = await db.from('items').insert([item]);
-  if (error) { showToast('Алдаа гарлаа', 'error'); return; }
+  if (error) { showToast('Алдаа гарлаа: ' + error.message, 'error'); return; }
 
   showToast('✅ Бараа нэмэгдлээ!', 'success');
   clearForm();
@@ -958,14 +872,14 @@ async function addItem() {
 }
 
 function clearForm() {
-  ['f_name','f_type','f_size','f_buy','f_sell','f_color','f_link','f_image','f_notes'].forEach(id => {
+  ['f_name','f_type','f_size','f_buy','f_sell','f_color','f_link','f_notes'].forEach(id => {
     document.getElementById(id).value = '';
   });
-  document.querySelectorAll('.type-pills .pill, .size-btn, .pants-size-btn').forEach(el => el.classList.remove('selected'));
-  selectedType = '';
-  selectedSize = '';
-  document.getElementById('clothingSizeGroup').style.display = 'block';
-  document.getElementById('pantsSizeGroup').style.display = 'none';
+  document.getElementById('f_image').value = '';
+  const p = document.getElementById('f_preview');
+  p.src = '';
+  p.style.display = 'none';
+  document.querySelectorAll('.add-section .pill, #f_sizeGrid .size-btn').forEach(el => el.classList.remove('selected'));
 }
 
 // FILTER
@@ -985,10 +899,7 @@ async function deleteItem(id) {
   await loadItems();
 }
 
-// EDIT
-let editType = '';
-let editSize = '';
-
+// EDIT MODAL
 function openEdit(id) {
   const item = allItems.find(i => i.id === id);
   if (!item) return;
@@ -1000,27 +911,30 @@ function openEdit(id) {
   document.getElementById('e_sell').value = item.sell_price || '';
   document.getElementById('e_color').value = item.color || '';
   document.getElementById('e_link').value = item.link || '';
-  document.getElementById('e_image').value = item.image_url || '';
   document.getElementById('e_notes').value = item.notes || '';
   document.getElementById('e_type').value = item.type || '';
   document.getElementById('e_size').value = item.size || '';
 
-  editType = item.type || '';
-  editSize = item.size || '';
+  // Reset previews
+  const ep = document.getElementById('e_preview');
+  if (item.image_url) {
+    ep.src = item.image_url;
+    ep.style.display = 'block';
+  } else {
+    ep.src = '';
+    ep.style.display = 'none';
+  }
+  document.getElementById('e_image').value = '';
 
   // Set type pill
   document.querySelectorAll('#editTypePills .pill').forEach(p => {
-    p.classList.toggle('selected', p.textContent.includes(item.type));
+    const t = p.textContent.replace(/[^\w\s]/g,'').trim();
+    p.classList.toggle('selected', p.onclick.toString().includes(`'${item.type}'`));
   });
 
-  // Show correct size grid
-  const pantsType = isPants(item.type);
-  document.getElementById('editClothingSizes').style.display = pantsType ? 'none' : 'flex';
-  document.getElementById('editPantsSizes').style.display = pantsType ? 'flex' : 'none';
-
-  // Select current size
-  document.querySelectorAll('#editClothingSizes .size-btn, #editPantsSizes .pants-size-btn').forEach(b => {
-    b.classList.toggle('selected', b.textContent === item.size);
+  // Set size btn
+  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent.trim() === item.size);
   });
 
   document.getElementById('editModal').classList.add('open');
@@ -1029,23 +943,26 @@ function openEdit(id) {
 function selectEditType(type, el) {
   document.querySelectorAll('#editTypePills .pill').forEach(p => p.classList.remove('selected'));
   el.classList.add('selected');
-  editType = type;
   document.getElementById('e_type').value = type;
-  const pantsType = isPants(type);
-  document.getElementById('editClothingSizes').style.display = pantsType ? 'none' : 'flex';
-  document.getElementById('editPantsSizes').style.display = pantsType ? 'flex' : 'none';
   document.getElementById('e_size').value = '';
-  document.querySelectorAll('#editClothingSizes .size-btn, #editPantsSizes .pants-size-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
 }
 
 function selectEditSize(size, el) {
-  document.querySelectorAll('#editClothingSizes .size-btn, #editPantsSizes .pants-size-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('e_size').value = size;
 }
 
 async function saveEdit() {
   const id = document.getElementById('e_id').value;
+
+  let imageData = null;
+  const fileInput = document.getElementById('e_image');
+  if (fileInput.files && fileInput.files[0]) {
+    imageData = await fileToBase64(fileInput.files[0]);
+  }
+
   const updated = {
     name: document.getElementById('e_name').value,
     type: document.getElementById('e_type').value,
@@ -1055,9 +972,10 @@ async function saveEdit() {
     sell_price: parseFloat(document.getElementById('e_sell').value) || 0,
     color: document.getElementById('e_color').value,
     link: document.getElementById('e_link').value,
-    image_url: document.getElementById('e_image').value,
     notes: document.getElementById('e_notes').value,
   };
+
+  if (imageData) updated.image_url = imageData;
 
   const { error } = await db.from('items').update(updated).eq('id', id);
   if (error) { showToast('Алдаа гарлаа', 'error'); return; }
@@ -1071,7 +989,6 @@ function closeModal() {
   document.getElementById('editModal').classList.remove('open');
 }
 
-// TOAST
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1079,7 +996,6 @@ function showToast(msg, type='success') {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// Close modal on overlay click
 document.getElementById('editModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
