@@ -51,6 +51,52 @@
     -webkit-text-fill-color: transparent;
   }
 
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* REALTIME INDICATOR */
+  .realtime-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .realtime-dot .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: background 0.3s;
+  }
+
+  .realtime-dot.live .dot {
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  .realtime-dot.live { color: var(--green); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* NEW ITEM FLASH */
+  @keyframes flashNew {
+    0% { background: rgba(0,230,118,0.15); }
+    100% { background: transparent; }
+  }
+
+  tr.new-item td {
+    animation: flashNew 2s ease-out forwards;
+  }
+
   .stats-bar {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -63,6 +109,11 @@
     background: var(--surface);
     padding: 20px 24px;
     text-align: center;
+    transition: background 0.3s;
+  }
+
+  .stat.updated {
+    animation: flashNew 1s ease-out;
   }
 
   .stat-value {
@@ -70,6 +121,7 @@
     font-size: 32px;
     line-height: 1;
     color: var(--accent);
+    transition: all 0.3s;
   }
 
   .stat-value.green { color: var(--green); }
@@ -145,12 +197,7 @@
     gap: 14px;
   }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group.wide { grid-column: span 2; }
   .form-group.full { grid-column: 1 / -1; }
 
@@ -195,11 +242,7 @@
     border: 1px solid var(--border);
   }
 
-  .type-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .type-pills { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .pill {
     padding: 8px 16px;
@@ -218,11 +261,7 @@
   .pill.sweatpants.selected { background: #2e7d32; border-color: #2e7d32; color: white; }
   .pill.cargo.selected  { background: #bf360c; border-color: #bf360c; color: white; }
 
-  .size-grid {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .size-grid { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .size-btn {
     min-width: 44px;
@@ -357,7 +396,6 @@
 
   .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
   .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
-
   .loading { text-align: center; padding: 40px; color: var(--muted); }
 
   .modal-overlay {
@@ -448,8 +486,12 @@
 
 <header>
   <div class="logo">RESELL TRACKER</div>
-  <div class="header-actions">
-    <span id="syncStatus" style="font-size:12px;color:var(--muted)">⏳ Connecting...</span>
+  <div class="header-right">
+    <div class="realtime-dot" id="realtimeDot">
+      <div class="dot"></div>
+      <span id="realtimeLabel">Холбогдож байна...</span>
+    </div>
+    <span id="syncStatus" style="font-size:12px;color:var(--muted)"></span>
   </div>
 </header>
 
@@ -492,12 +534,10 @@
   <div class="add-section">
     <div class="section-title">+ Шинэ бараа нэмэх</div>
     <div class="form-grid">
-
       <div class="form-group wide">
         <label>Барааны нэр</label>
         <input type="text" id="f_name" placeholder="жнь: Sp5der Pink Hoodie">
       </div>
-
       <div class="form-group full">
         <label>Төрөл</label>
         <div class="type-pills">
@@ -509,7 +549,6 @@
         </div>
         <input type="hidden" id="f_type">
       </div>
-
       <div class="form-group full">
         <label>Хэмжээ</label>
         <div class="size-grid" id="f_sizeGrid">
@@ -522,7 +561,6 @@
         </div>
         <input type="hidden" id="f_size">
       </div>
-
       <div class="form-group">
         <label>Статус</label>
         <select id="f_status">
@@ -531,39 +569,32 @@
           <option value="Зарагдсан">Зарагдсан</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Авах үнэ (€)</label>
         <input type="number" id="f_buy" placeholder="0.00" step="0.01">
       </div>
-
       <div class="form-group">
         <label>Зарах үнэ (€)</label>
         <input type="number" id="f_sell" placeholder="0.00" step="0.01">
       </div>
-
       <div class="form-group">
         <label>Өнгө</label>
         <input type="text" id="f_color" placeholder="жнь: Pink, Black">
       </div>
-
       <div class="form-group wide">
         <label>Барааны линк</label>
         <input type="url" id="f_link" placeholder="https://...">
       </div>
-
       <div class="form-group wide">
         <label>Зураг (file)</label>
         <input type="file" id="f_image" accept="image/*" onchange="previewFile(this, 'f_preview')">
         <img id="f_preview" class="img-preview" alt="preview">
       </div>
-
       <div class="form-group full">
         <label>Тэмдэглэл</label>
         <textarea id="f_notes" placeholder="нэмэлт мэдээлэл..."></textarea>
       </div>
     </div>
-
     <div style="margin-top: 20px; display: flex; gap: 12px;">
       <button class="btn btn-primary" onclick="addItem()">+ Нэмэх</button>
       <button class="btn btn-outline" onclick="clearForm()">Цэвэрлэх</button>
@@ -590,12 +621,10 @@
     </div>
     <div class="form-grid">
       <input type="hidden" id="e_id">
-
       <div class="form-group wide">
         <label>Нэр</label>
         <input type="text" id="e_name">
       </div>
-
       <div class="form-group full">
         <label>Төрөл</label>
         <div class="type-pills" id="editTypePills">
@@ -607,7 +636,6 @@
         </div>
         <input type="hidden" id="e_type">
       </div>
-
       <div class="form-group full">
         <label>Хэмжээ</label>
         <div class="size-grid" id="e_sizeGrid">
@@ -620,7 +648,6 @@
         </div>
         <input type="hidden" id="e_size">
       </div>
-
       <div class="form-group">
         <label>Статус</label>
         <select id="e_status">
@@ -629,33 +656,27 @@
           <option value="Зарагдсан">Зарагдсан</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Авах үнэ (€)</label>
         <input type="number" id="e_buy" step="0.01">
       </div>
-
       <div class="form-group">
         <label>Зарах үнэ (€)</label>
         <input type="number" id="e_sell" step="0.01">
       </div>
-
       <div class="form-group">
         <label>Өнгө</label>
         <input type="text" id="e_color">
       </div>
-
       <div class="form-group wide">
         <label>Линк</label>
         <input type="url" id="e_link">
       </div>
-
       <div class="form-group wide">
         <label>Зураг солих (file)</label>
         <input type="file" id="e_image" accept="image/*" onchange="previewFile(this, 'e_preview')">
         <img id="e_preview" class="img-preview" alt="preview">
       </div>
-
       <div class="form-group full">
         <label>Тэмдэглэл</label>
         <textarea id="e_notes"></textarea>
@@ -678,21 +699,18 @@ const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let allItems = [];
 let currentFilter = 'all';
+let latestIds = new Set();
 
-// Зураг preview
+// ── Зураг preview ──
 function previewFile(input, previewId) {
   const preview = document.getElementById(previewId);
   if (input.files && input.files[0]) {
     const reader = new FileReader();
-    reader.onload = e => {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-    };
+    reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
     reader.readAsDataURL(input.files[0]);
   }
 }
 
-// File → base64
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -702,25 +720,76 @@ function fileToBase64(file) {
   });
 }
 
+// ── Realtime indicator ──
+function setRealtimeStatus(live) {
+  const dot = document.getElementById('realtimeDot');
+  const label = document.getElementById('realtimeLabel');
+  if (live) {
+    dot.classList.add('live');
+    label.textContent = 'Live';
+  } else {
+    dot.classList.remove('live');
+    label.textContent = 'Тасарсан';
+  }
+}
+
+// ── Init ──
 async function init() {
   try {
     await loadItems();
-    document.getElementById('syncStatus').textContent = '🟢 Synced';
+    setupRealtime();
   } catch(e) {
     document.getElementById('syncStatus').textContent = '🔴 Error';
     showToast('Холболт амжилтгүй', 'error');
   }
 }
 
+// ── Load ──
 async function loadItems() {
   const { data, error } = await db.from('items').select('*').order('created_at', { ascending: false });
   if (error) throw error;
   allItems = data || [];
+  latestIds = new Set(allItems.map(i => i.id));
   renderTable();
   updateStats();
 }
 
-function renderTable() {
+// ── Realtime subscription ──
+function setupRealtime() {
+  db.channel('items-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, payload => {
+      handleRealtimeEvent(payload);
+    })
+    .subscribe(status => {
+      if (status === 'SUBSCRIBED') setRealtimeStatus(true);
+      else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') setRealtimeStatus(false);
+    });
+}
+
+function handleRealtimeEvent(payload) {
+  const { eventType, new: newRow, old: oldRow } = payload;
+
+  if (eventType === 'INSERT') {
+    allItems.unshift(newRow);
+    latestIds.add(newRow.id);
+    showToast(`🆕 Шинэ бараа нэмэгдлээ: ${newRow.name}`, 'success');
+    renderTable(newRow.id); // highlight шинэ мөр
+  } else if (eventType === 'UPDATE') {
+    const idx = allItems.findIndex(i => i.id === newRow.id);
+    if (idx !== -1) allItems[idx] = newRow;
+    renderTable();
+    showToast(`✏️ Бараа шинэчлэгдлээ: ${newRow.name}`, 'success');
+  } else if (eventType === 'DELETE') {
+    allItems = allItems.filter(i => i.id !== oldRow.id);
+    renderTable();
+    showToast(`🗑️ Бараа устгагдлаа`, 'success');
+  }
+
+  updateStats();
+}
+
+// ── Render ──
+function renderTable(newItemId = null) {
   const filtered = currentFilter === 'all' ? allItems : allItems.filter(i => i.status === currentFilter);
   const container = document.getElementById('tableContainer');
 
@@ -742,8 +811,9 @@ function renderTable() {
     const img = item.image_url
       ? `<img src="${item.image_url}" class="item-img" onerror="this.style.display='none'">`
       : `<div class="item-img-placeholder">${getTypeEmoji(item.type)}</div>`;
+    const isNew = newItemId && item.id === newItemId;
 
-    return `<tr>
+    return `<tr class="${isNew ? 'new-item' : ''}">
       <td>${img}</td>
       <td>
         <div style="font-weight:600">${item.name || '-'}</div>
@@ -823,7 +893,7 @@ function updateStats() {
   document.getElementById('statProfit').textContent = `€${profit.toFixed(0)}`;
 }
 
-// TYPE SELECTION — add form
+// ── Type / Size selection ──
 function selectType(type, el) {
   document.querySelectorAll('.add-section .type-pills .pill').forEach(p => p.classList.remove('selected'));
   el.classList.add('selected');
@@ -832,14 +902,13 @@ function selectType(type, el) {
   document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
 }
 
-// SIZE SELECTION — add form
 function selectSize(size, el) {
   document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('f_size').value = size;
 }
 
-// ADD ITEM
+// ── Add item ──
 async function addItem() {
   const name = document.getElementById('f_name').value.trim();
   if (!name) { showToast('Барааны нэр оруулна уу', 'error'); return; }
@@ -866,9 +935,8 @@ async function addItem() {
   const { error } = await db.from('items').insert([item]);
   if (error) { showToast('Алдаа гарлаа: ' + error.message, 'error'); return; }
 
-  showToast('✅ Бараа нэмэгдлээ!', 'success');
   clearForm();
-  await loadItems();
+  // Realtime-р автоматаар шинэчлэгдэнэ
 }
 
 function clearForm() {
@@ -877,12 +945,11 @@ function clearForm() {
   });
   document.getElementById('f_image').value = '';
   const p = document.getElementById('f_preview');
-  p.src = '';
-  p.style.display = 'none';
+  p.src = ''; p.style.display = 'none';
   document.querySelectorAll('.add-section .pill, #f_sizeGrid .size-btn').forEach(el => el.classList.remove('selected'));
 }
 
-// FILTER
+// ── Filter ──
 function filterItems(filter, el) {
   currentFilter = filter;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -890,16 +957,15 @@ function filterItems(filter, el) {
   renderTable();
 }
 
-// DELETE
+// ── Delete ──
 async function deleteItem(id) {
   if (!confirm('Устгах уу?')) return;
   const { error } = await db.from('items').delete().eq('id', id);
   if (error) { showToast('Алдаа гарлаа', 'error'); return; }
-  showToast('🗑️ Устгагдлаа', 'success');
-  await loadItems();
+  // Realtime-р автоматаар шинэчлэгдэнэ
 }
 
-// EDIT MODAL
+// ── Edit modal ──
 function openEdit(id) {
   const item = allItems.find(i => i.id === id);
   if (!item) return;
@@ -915,24 +981,14 @@ function openEdit(id) {
   document.getElementById('e_type').value = item.type || '';
   document.getElementById('e_size').value = item.size || '';
 
-  // Reset previews
   const ep = document.getElementById('e_preview');
-  if (item.image_url) {
-    ep.src = item.image_url;
-    ep.style.display = 'block';
-  } else {
-    ep.src = '';
-    ep.style.display = 'none';
-  }
+  if (item.image_url) { ep.src = item.image_url; ep.style.display = 'block'; }
+  else { ep.src = ''; ep.style.display = 'none'; }
   document.getElementById('e_image').value = '';
 
-  // Set type pill
   document.querySelectorAll('#editTypePills .pill').forEach(p => {
-    const t = p.textContent.replace(/[^\w\s]/g,'').trim();
     p.classList.toggle('selected', p.onclick.toString().includes(`'${item.type}'`));
   });
-
-  // Set size btn
   document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => {
     b.classList.toggle('selected', b.textContent.trim() === item.size);
   });
@@ -956,7 +1012,6 @@ function selectEditSize(size, el) {
 
 async function saveEdit() {
   const id = document.getElementById('e_id').value;
-
   let imageData = null;
   const fileInput = document.getElementById('e_image');
   if (fileInput.files && fileInput.files[0]) {
@@ -974,15 +1029,12 @@ async function saveEdit() {
     link: document.getElementById('e_link').value,
     notes: document.getElementById('e_notes').value,
   };
-
   if (imageData) updated.image_url = imageData;
 
   const { error } = await db.from('items').update(updated).eq('id', id);
   if (error) { showToast('Алдаа гарлаа', 'error'); return; }
-
-  showToast('✅ Хадгалагдлаа!', 'success');
   closeModal();
-  await loadItems();
+  // Realtime-р автоматаар шинэчлэгдэнэ
 }
 
 function closeModal() {
