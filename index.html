@@ -18,17 +18,11 @@
     --muted: #666;
     --green: #00e676;
     --yellow: #ffd600;
+    --blue: #40c4ff;
+    --purple: #ce93d8;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
   header {
     border-bottom: 1px solid var(--border);
     padding: 20px 32px;
@@ -41,7 +35,6 @@
     backdrop-filter: blur(10px);
     z-index: 100;
   }
-
   .logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 28px;
@@ -50,436 +43,109 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  /* REALTIME INDICATOR */
-  .realtime-dot {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .realtime-dot .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--muted);
-    transition: background 0.3s;
-  }
-
-  .realtime-dot.live .dot {
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
-    animation: pulse 2s infinite;
-  }
-
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .realtime-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .realtime-dot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+  .realtime-dot.live .dot { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
   .realtime-dot.live { color: var(--green); }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* NEW ITEM FLASH */
-  @keyframes flashNew {
-    0% { background: rgba(0,230,118,0.15); }
-    100% { background: transparent; }
-  }
-
-  tr.new-item td {
-    animation: flashNew 2s ease-out forwards;
-  }
-
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  @keyframes flashNew { 0% { background: rgba(0,230,118,0.15); } 100% { background: transparent; } }
+  tr.new-item td { animation: flashNew 2s ease-out forwards; }
   .stats-bar {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 1px;
     background: var(--border);
     border-bottom: 1px solid var(--border);
   }
-
-  .stat {
-    background: var(--surface);
-    padding: 20px 24px;
-    text-align: center;
-    transition: background 0.3s;
-  }
-
-  .stat.updated {
-    animation: flashNew 1s ease-out;
-  }
-
-  .stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    line-height: 1;
-    color: var(--accent);
-    transition: all 0.3s;
-  }
-
+  .stat { background: var(--surface); padding: 16px 20px; text-align: center; }
+  .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; color: var(--accent); }
   .stat-value.green { color: var(--green); }
   .stat-value.yellow { color: var(--yellow); }
   .stat-value.white { color: var(--text); }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 4px;
-  }
-
-  .tabs {
-    display: flex;
-    gap: 0;
-    padding: 0 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .tab {
-    padding: 16px 24px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
+  .stat-value.blue { color: var(--blue); }
+  .stat-value.purple { color: var(--purple); }
+  .stat-value.red { color: var(--accent); }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .tabs { display: flex; gap: 0; padding: 0 32px; border-bottom: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
+  .tab { padding: 16px 20px; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-  .main {
-    padding: 32px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .add-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 32px;
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-  }
-
+  .main { padding: 32px; max-width: 1400px; margin: 0 auto; }
+  .add-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 32px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group.wide { grid-column: span 2; }
   .form-group.full { grid-column: 1 / -1; }
-
-  label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  input, select, textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    transition: border-color 0.2s;
-    outline: none;
-  }
-
+  label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 500; }
+  input, select, textarea { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; transition: border-color 0.2s; outline: none; }
   input:focus, select:focus, textarea:focus { border-color: var(--accent); }
   select option { background: var(--surface2); }
   textarea { resize: vertical; min-height: 60px; }
-
-  input[type="file"] {
-    padding: 8px 14px;
-    cursor: pointer;
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .img-preview {
-    width: 100%;
-    max-height: 140px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-top: 6px;
-    display: none;
-    border: 1px solid var(--border);
-  }
-
+  input[type="file"] { padding: 8px 14px; cursor: pointer; color: var(--muted); font-size: 13px; }
+  .img-preview { width: 100%; max-height: 140px; object-fit: cover; border-radius: 8px; margin-top: 6px; display: none; border: 1px solid var(--border); }
   .type-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .pill {
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
+  .pill { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--muted); font-weight: 500; }
   .pill:hover { border-color: var(--accent); color: var(--text); }
   .pill.hoodie.selected { background: #9c27b0; border-color: #9c27b0; color: white; }
   .pill.jeans.selected  { background: #1565c0; border-color: #1565c0; color: white; }
   .pill.sweatpants.selected { background: #2e7d32; border-color: #2e7d32; color: white; }
   .pill.cargo.selected  { background: #bf360c; border-color: #bf360c; color: white; }
-
   .size-grid { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .size-btn {
-    min-width: 44px;
-    height: 36px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 600;
-    padding: 0 10px;
-  }
-
+  .size-btn { min-width: 44px; height: 36px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 600; padding: 0 10px; }
   .size-btn:hover { border-color: var(--accent); color: var(--text); }
   .size-btn.selected { background: var(--accent); border-color: var(--accent); color: white; }
-
-  .btn {
-    padding: 12px 24px;
-    border-radius: 8px;
-    border: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
+  .btn { padding: 12px 24px; border-radius: 8px; border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
   .btn-primary { background: var(--accent); color: white; }
   .btn-primary:hover { background: #e63030; transform: translateY(-1px); }
   .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
-
-  .table-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .table-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
-  }
-
+  .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; }
+  .table-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .table-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
   table { width: 100%; border-collapse: collapse; }
-
-  th {
-    padding: 12px 16px;
-    text-align: left;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    font-weight: 500;
-    background: var(--surface2);
-  }
-
-  td {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-    vertical-align: middle;
-  }
-
+  th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500; background: var(--surface2); }
+  td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(255,255,255,0.02); }
-
-  .type-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
+  .type-badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
   .badge-hoodie    { background: rgba(156,39,176,0.2); color: #ce93d8; }
   .badge-jeans     { background: rgba(21,101,192,0.2); color: #90caf9; }
   .badge-sweatpants{ background: rgba(46,125,50,0.2);  color: #a5d6a7; }
   .badge-cargo     { background: rgba(191,54,12,0.2);  color: #ffab91; }
-
-  .status-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-
+  .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .status-badge:hover { opacity: 0.75; }
   .status-interested { background: rgba(255,214,0,0.15); color: var(--yellow); }
   .status-ordered    { background: rgba(255,140,0,0.15); color: var(--accent2); }
+  .status-arrived    { background: rgba(64,196,255,0.15); color: var(--blue); }
   .status-sold       { background: rgba(0,230,118,0.15); color: var(--green); }
-
+  .status-return     { background: rgba(255,60,60,0.15); color: var(--accent); }
   .profit-positive { color: var(--green); font-weight: 600; }
   .profit-negative { color: var(--accent); font-weight: 600; }
-
-  .item-img {
-    width: 44px;
-    height: 44px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-  }
-
-  .item-img-placeholder {
-    width: 44px;
-    height: 44px;
-    border-radius: 8px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-  }
-
+  .item-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); background: var(--surface2); }
+  .item-img-placeholder { width: 44px; height: 44px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
   .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
   .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
   .loading { text-align: center; padding: 40px; color: var(--muted); }
-
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 200;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .close-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 20px;
-    padding: 4px;
-  }
-
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .close-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 20px; padding: 4px; }
   .close-btn:hover { color: var(--text); }
-
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 20px;
-    font-size: 14px;
-    z-index: 300;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; font-size: 14px; z-index: 300; transform: translateY(100px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
   .toast.show { transform: translateY(0); opacity: 1; }
   .toast.success { border-color: var(--green); color: var(--green); }
   .toast.error { border-color: var(--accent); color: var(--accent); }
-
-  @media (max-width: 768px) {
-    .stats-bar { grid-template-columns: repeat(3, 1fr); }
-    .main { padding: 16px; }
-    .form-grid { grid-template-columns: 1fr 1fr; }
-    header { padding: 16px; }
-    table { font-size: 12px; }
-    td, th { padding: 10px 12px; }
-  }
-
-  @media (max-width: 480px) {
-    .stats-bar { grid-template-columns: repeat(2, 1fr); }
-    .form-grid { grid-column: 1; }
-    .form-group.wide { grid-column: span 1; }
-  }
+  /* STATUS FLOW */
+  .status-flow { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .flow-step { font-size: 10px; padding: 3px 8px; border-radius: 10px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .flow-arrow { color: var(--muted); font-size: 10px; }
+  @media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(4, 1fr); } .main { padding: 16px; } .form-grid { grid-template-columns: 1fr 1fr; } header { padding: 16px; } table { font-size: 12px; } td, th { padding: 10px 12px; } }
+  @media (max-width: 480px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
@@ -491,52 +157,35 @@
       <div class="dot"></div>
       <span id="realtimeLabel">Холбогдож байна...</span>
     </div>
-    <span id="syncStatus" style="font-size:12px;color:var(--muted)"></span>
   </div>
 </header>
 
 <div class="stats-bar">
-  <div class="stat">
-    <div class="stat-value white" id="statTotal">0</div>
-    <div class="stat-label">Нийт бараа</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value" id="statInterested">0</div>
-    <div class="stat-label">Сонирхож</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value yellow" id="statOrdered">0</div>
-    <div class="stat-label">Захиалсан</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value green" id="statSold">0</div>
-    <div class="stat-label">Зарагдсан</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value" id="statSpent">€0</div>
-    <div class="stat-label">Нийт зардал</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value green" id="statProfit">€0</div>
-    <div class="stat-label">Нийт ашиг</div>
-  </div>
+  <div class="stat"><div class="stat-value white" id="statTotal">0</div><div class="stat-label">Нийт</div></div>
+  <div class="stat"><div class="stat-value" id="statInterested">0</div><div class="stat-label">Сонирхож</div></div>
+  <div class="stat"><div class="stat-value yellow" id="statOrdered">0</div><div class="stat-label">Захиалсан</div></div>
+  <div class="stat"><div class="stat-value blue" id="statArrived">0</div><div class="stat-label">Ирсэн</div></div>
+  <div class="stat"><div class="stat-value green" id="statSold">0</div><div class="stat-label">Зарагдсан</div></div>
+  <div class="stat"><div class="stat-value red" id="statReturn">0</div><div class="stat-label">Return</div></div>
+  <div class="stat"><div class="stat-value green" id="statProfit">€0</div><div class="stat-label">Ашиг</div></div>
 </div>
 
 <div class="tabs">
   <div class="tab active" onclick="filterItems('all', this)">Бүгд</div>
   <div class="tab" onclick="filterItems('Сонирхож байна', this)">Сонирхож</div>
   <div class="tab" onclick="filterItems('Захиалсан', this)">Захиалсан</div>
+  <div class="tab" onclick="filterItems('Ирсэн', this)">Ирсэн</div>
   <div class="tab" onclick="filterItems('Зарагдсан', this)">Зарагдсан</div>
+  <div class="tab" onclick="filterItems('Return', this)">Return</div>
 </div>
 
 <div class="main">
-  <!-- ADD FORM -->
   <div class="add-section">
     <div class="section-title">+ Шинэ бараа нэмэх</div>
     <div class="form-grid">
       <div class="form-group wide">
         <label>Барааны нэр</label>
-        <input type="text" id="f_name" placeholder="жнь: Sp5der Pink Hoodie">
+        <input type="text" id="f_name" placeholder="жнь: Black Reversible Hoodie">
       </div>
       <div class="form-group full">
         <label>Төрөл</label>
@@ -552,12 +201,12 @@
       <div class="form-group full">
         <label>Хэмжээ</label>
         <div class="size-grid" id="f_sizeGrid">
-          <button class="size-btn" onclick="selectSize('XS', this)">XS</button>
-          <button class="size-btn" onclick="selectSize('S', this)">S</button>
-          <button class="size-btn" onclick="selectSize('M', this)">M</button>
-          <button class="size-btn" onclick="selectSize('L', this)">L</button>
-          <button class="size-btn" onclick="selectSize('XL', this)">XL</button>
-          <button class="size-btn" onclick="selectSize('XXL', this)">XXL</button>
+          <button class="size-btn" onclick="selectSize('XS',this)">XS</button>
+          <button class="size-btn" onclick="selectSize('S',this)">S</button>
+          <button class="size-btn" onclick="selectSize('M',this)">M</button>
+          <button class="size-btn" onclick="selectSize('L',this)">L</button>
+          <button class="size-btn" onclick="selectSize('XL',this)">XL</button>
+          <button class="size-btn" onclick="selectSize('XXL',this)">XXL</button>
         </div>
         <input type="hidden" id="f_size">
       </div>
@@ -566,7 +215,9 @@
         <select id="f_status">
           <option value="Сонирхож байна">Сонирхож байна</option>
           <option value="Захиалсан">Захиалсан</option>
+          <option value="Ирсэн">Ирсэн (QC approved)</option>
           <option value="Зарагдсан">Зарагдсан</option>
+          <option value="Return">Return</option>
         </select>
       </div>
       <div class="form-group">
@@ -579,36 +230,42 @@
       </div>
       <div class="form-group">
         <label>Өнгө</label>
-        <input type="text" id="f_color" placeholder="жнь: Pink, Black">
+        <input type="text" id="f_color" placeholder="жнь: Black">
       </div>
       <div class="form-group wide">
         <label>Барааны линк</label>
         <input type="url" id="f_link" placeholder="https://...">
       </div>
       <div class="form-group wide">
-        <label>Зураг (file)</label>
-        <input type="file" id="f_image" accept="image/*" onchange="previewFile(this, 'f_preview')">
+        <label>Зураг</label>
+        <input type="file" id="f_image" accept="image/*" onchange="previewFile(this,'f_preview')">
         <img id="f_preview" class="img-preview" alt="preview">
       </div>
       <div class="form-group full">
-        <label>Тэмдэглэл</label>
+        <label>Тэмдэглэл (захиалгын дугаар, QC мэдээлэл...)</label>
         <textarea id="f_notes" placeholder="нэмэлт мэдээлэл..."></textarea>
       </div>
     </div>
-    <div style="margin-top: 20px; display: flex; gap: 12px;">
+    <div style="margin-top:20px;display:flex;gap:12px;">
       <button class="btn btn-primary" onclick="addItem()">+ Нэмэх</button>
       <button class="btn btn-outline" onclick="clearForm()">Цэвэрлэх</button>
     </div>
   </div>
 
-  <!-- TABLE -->
   <div class="table-section">
     <div class="table-header">
       <div class="section-title" style="margin:0">Бараанууд</div>
+      <div class="status-flow">
+        <span class="flow-step" style="color:var(--yellow)">Захиалсан</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="color:var(--blue)">Ирсэн</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="color:var(--green)">Зарагдсан</span>
+        <span class="flow-arrow">/</span>
+        <span class="flow-step" style="color:var(--accent)">Return</span>
+      </div>
     </div>
-    <div id="tableContainer">
-      <div class="loading">⏳ Уншиж байна...</div>
-    </div>
+    <div id="tableContainer"><div class="loading">⏳ Уншиж байна...</div></div>
   </div>
 </div>
 
@@ -621,18 +278,15 @@
     </div>
     <div class="form-grid">
       <input type="hidden" id="e_id">
-      <div class="form-group wide">
-        <label>Нэр</label>
-        <input type="text" id="e_name">
-      </div>
+      <div class="form-group wide"><label>Нэр</label><input type="text" id="e_name"></div>
       <div class="form-group full">
         <label>Төрөл</label>
         <div class="type-pills" id="editTypePills">
-          <div class="pill hoodie" onclick="selectEditType('Hoodie', this)">🧥 Hoodie</div>
-          <div class="pill hoodie" onclick="selectEditType('Zip Hoodie', this)">🤐 Zip Hoodie</div>
-          <div class="pill jeans" onclick="selectEditType('Baggy Jeans', this)">👖 Baggy Jeans</div>
-          <div class="pill sweatpants" onclick="selectEditType('Sweatpants', this)">🩳 Sweatpants</div>
-          <div class="pill cargo" onclick="selectEditType('Cargo Pants', this)">🎽 Cargo Pants</div>
+          <div class="pill hoodie" onclick="selectEditType('Hoodie',this)">🧥 Hoodie</div>
+          <div class="pill hoodie" onclick="selectEditType('Zip Hoodie',this)">🤐 Zip Hoodie</div>
+          <div class="pill jeans" onclick="selectEditType('Baggy Jeans',this)">👖 Baggy Jeans</div>
+          <div class="pill sweatpants" onclick="selectEditType('Sweatpants',this)">🩳 Sweatpants</div>
+          <div class="pill cargo" onclick="selectEditType('Cargo Pants',this)">🎽 Cargo Pants</div>
         </div>
         <input type="hidden" id="e_type">
       </div>
@@ -653,38 +307,43 @@
         <select id="e_status">
           <option value="Сонирхож байна">Сонирхож байна</option>
           <option value="Захиалсан">Захиалсан</option>
+          <option value="Ирсэн">Ирсэн (QC approved)</option>
           <option value="Зарагдсан">Зарагдсан</option>
+          <option value="Return">Return</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Авах үнэ (€)</label>
-        <input type="number" id="e_buy" step="0.01">
-      </div>
-      <div class="form-group">
-        <label>Зарах үнэ (€)</label>
-        <input type="number" id="e_sell" step="0.01">
-      </div>
-      <div class="form-group">
-        <label>Өнгө</label>
-        <input type="text" id="e_color">
-      </div>
+      <div class="form-group"><label>Авах үнэ (€)</label><input type="number" id="e_buy" step="0.01"></div>
+      <div class="form-group"><label>Зарах үнэ (€)</label><input type="number" id="e_sell" step="0.01"></div>
+      <div class="form-group"><label>Өнгө</label><input type="text" id="e_color"></div>
+      <div class="form-group wide"><label>Линк</label><input type="url" id="e_link"></div>
       <div class="form-group wide">
-        <label>Линк</label>
-        <input type="url" id="e_link">
-      </div>
-      <div class="form-group wide">
-        <label>Зураг солих (file)</label>
-        <input type="file" id="e_image" accept="image/*" onchange="previewFile(this, 'e_preview')">
+        <label>Зураг солих</label>
+        <input type="file" id="e_image" accept="image/*" onchange="previewFile(this,'e_preview')">
         <img id="e_preview" class="img-preview" alt="preview">
       </div>
-      <div class="form-group full">
-        <label>Тэмдэглэл</label>
-        <textarea id="e_notes"></textarea>
-      </div>
+      <div class="form-group full"><label>Тэмдэглэл</label><textarea id="e_notes"></textarea></div>
     </div>
     <div style="margin-top:20px;display:flex;gap:12px;">
       <button class="btn btn-primary" onclick="saveEdit()">Хадгалах</button>
       <button class="btn btn-outline" onclick="closeModal()">Болих</button>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS MODAL -->
+<div class="modal-overlay" id="statusModal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-title">
+      СТАТУС СОЛИХ
+      <button class="close-btn" onclick="closeStatusModal()">✕</button>
+    </div>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:20px" id="statusModalName"></p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn btn-outline" onclick="setStatus('Сонирхож байна')" style="justify-content:flex-start">⭐ Сонирхож байна</button>
+      <button class="btn btn-outline" onclick="setStatus('Захиалсан')" style="justify-content:flex-start;color:var(--yellow);border-color:var(--yellow)">📦 Захиалсан</button>
+      <button class="btn btn-outline" onclick="setStatus('Ирсэн')" style="justify-content:flex-start;color:var(--blue);border-color:var(--blue)">✅ Ирсэн (QC approved)</button>
+      <button class="btn btn-outline" onclick="setStatus('Зарагдсан')" style="justify-content:flex-start;color:var(--green);border-color:var(--green)">💚 Зарагдсан</button>
+      <button class="btn btn-outline" onclick="setStatus('Return')" style="justify-content:flex-start;color:var(--accent);border-color:var(--accent)">🔴 Return (буцаах)</button>
     </div>
   </div>
 </div>
@@ -699,9 +358,8 @@ const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let allItems = [];
 let currentFilter = 'all';
-let latestIds = new Set();
+let statusEditId = null;
 
-// ── Зураг preview ──
 function previewFile(input, previewId) {
   const preview = document.getElementById(previewId);
   if (input.files && input.files[0]) {
@@ -720,45 +378,34 @@ function fileToBase64(file) {
   });
 }
 
-// ── Realtime indicator ──
 function setRealtimeStatus(live) {
   const dot = document.getElementById('realtimeDot');
   const label = document.getElementById('realtimeLabel');
-  if (live) {
-    dot.classList.add('live');
-    label.textContent = 'Live';
-  } else {
-    dot.classList.remove('live');
-    label.textContent = 'Тасарсан';
-  }
+  if (live) { dot.classList.add('live'); label.textContent = 'Live'; }
+  else { dot.classList.remove('live'); label.textContent = 'Тасарсан'; }
 }
 
-// ── Init ──
 async function init() {
-  try {
-    await loadItems();
-    setupRealtime();
-  } catch(e) {
-    document.getElementById('syncStatus').textContent = '🔴 Error';
-    showToast('Холболт амжилтгүй', 'error');
-  }
+  try { await loadItems(); setupRealtime(); }
+  catch(e) { showToast('Холболт амжилтгүй', 'error'); }
 }
 
-// ── Load ──
 async function loadItems() {
   const { data, error } = await db.from('items').select('*').order('created_at', { ascending: false });
   if (error) throw error;
   allItems = data || [];
-  latestIds = new Set(allItems.map(i => i.id));
   renderTable();
   updateStats();
 }
 
-// ── Realtime subscription ──
 function setupRealtime() {
   db.channel('items-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, payload => {
-      handleRealtimeEvent(payload);
+      const { eventType, new: newRow, old: oldRow } = payload;
+      if (eventType === 'INSERT') { allItems.unshift(newRow); showToast(`🆕 ${newRow.name}`, 'success'); renderTable(newRow.id); }
+      else if (eventType === 'UPDATE') { const idx = allItems.findIndex(i => i.id === newRow.id); if (idx !== -1) allItems[idx] = newRow; renderTable(); showToast(`✏️ ${newRow.name} шинэчлэгдлээ`, 'success'); }
+      else if (eventType === 'DELETE') { allItems = allItems.filter(i => i.id !== oldRow.id); renderTable(); showToast('🗑️ Устгагдлаа', 'success'); }
+      updateStats();
     })
     .subscribe(status => {
       if (status === 'SUBSCRIBED') setRealtimeStatus(true);
@@ -766,96 +413,9 @@ function setupRealtime() {
     });
 }
 
-function handleRealtimeEvent(payload) {
-  const { eventType, new: newRow, old: oldRow } = payload;
-
-  if (eventType === 'INSERT') {
-    allItems.unshift(newRow);
-    latestIds.add(newRow.id);
-    showToast(`🆕 Шинэ бараа нэмэгдлээ: ${newRow.name}`, 'success');
-    renderTable(newRow.id); // highlight шинэ мөр
-  } else if (eventType === 'UPDATE') {
-    const idx = allItems.findIndex(i => i.id === newRow.id);
-    if (idx !== -1) allItems[idx] = newRow;
-    renderTable();
-    showToast(`✏️ Бараа шинэчлэгдлээ: ${newRow.name}`, 'success');
-  } else if (eventType === 'DELETE') {
-    allItems = allItems.filter(i => i.id !== oldRow.id);
-    renderTable();
-    showToast(`🗑️ Бараа устгагдлаа`, 'success');
-  }
-
-  updateStats();
-}
-
-// ── Render ──
-function renderTable(newItemId = null) {
-  const filtered = currentFilter === 'all' ? allItems : allItems.filter(i => i.status === currentFilter);
-  const container = document.getElementById('tableContainer');
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="emoji">📦</div>
-        <h3>Бараа байхгүй байна</h3>
-        <p>Дээрх формоор шинэ бараа нэм</p>
-      </div>`;
-    return;
-  }
-
-  const rows = filtered.map(item => {
-    const profit = (item.sell_price || 0) - (item.buy_price || 0);
-    const profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
-    const badgeClass = getBadgeClass(item.type);
-    const statusClass = getStatusClass(item.status);
-    const img = item.image_url
-      ? `<img src="${item.image_url}" class="item-img" onerror="this.style.display='none'">`
-      : `<div class="item-img-placeholder">${getTypeEmoji(item.type)}</div>`;
-    const isNew = newItemId && item.id === newItemId;
-
-    return `<tr class="${isNew ? 'new-item' : ''}">
-      <td>${img}</td>
-      <td>
-        <div style="font-weight:600">${item.name || '-'}</div>
-        ${item.notes ? `<div style="font-size:11px;color:var(--muted);margin-top:2px">${item.notes}</div>` : ''}
-      </td>
-      <td><span class="type-badge ${badgeClass}">${item.type || '-'}</span></td>
-      <td><span class="status-badge ${statusClass}">${item.status || '-'}</span></td>
-      <td><span style="background:var(--surface2);padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600">${item.size || '-'}</span></td>
-      <td>€${(item.buy_price || 0).toFixed(2)}</td>
-      <td>€${(item.sell_price || 0).toFixed(2)}</td>
-      <td class="${profitClass}">€${profit.toFixed(2)}</td>
-      <td>${item.color || '-'}</td>
-      <td>
-        <div style="display:flex;gap:6px">
-          ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline btn-sm">🔗</a>` : ''}
-          <button class="btn btn-outline btn-sm" onclick="openEdit('${item.id}')">✏️</button>
-          <button class="btn btn-outline btn-sm" style="color:var(--accent)" onclick="deleteItem('${item.id}')">🗑️</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-
-  container.innerHTML = `
-    <div style="overflow-x:auto">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Нэр</th>
-          <th>Төрөл</th>
-          <th>Статус</th>
-          <th>Хэмжээ</th>
-          <th>Авах €</th>
-          <th>Зарах €</th>
-          <th>Ашиг</th>
-          <th>Өнгө</th>
-          <th>Үйлдэл</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-    </div>`;
+function getStatusClass(status) {
+  const map = { 'Сонирхож байна':'status-interested','Захиалсан':'status-ordered','Ирсэн':'status-arrived','Зарагдсан':'status-sold','Return':'status-return' };
+  return map[status] || 'status-interested';
 }
 
 function getBadgeClass(type) {
@@ -866,191 +426,194 @@ function getBadgeClass(type) {
   return 'badge-hoodie';
 }
 
-function getStatusClass(status) {
-  if (status === 'Зарагдсан') return 'status-sold';
-  if (status === 'Захиалсан') return 'status-ordered';
-  return 'status-interested';
-}
-
 function getTypeEmoji(type) {
-  const map = { 'Hoodie':'🧥','Zip Hoodie':'🤐','Baggy Jeans':'👖','Sweatpants':'🩳','Cargo Pants':'🎽' };
+  const map = {'Hoodie':'🧥','Zip Hoodie':'🤐','Baggy Jeans':'👖','Sweatpants':'🩳','Cargo Pants':'🎽'};
   return map[type] || '📦';
 }
 
-function updateStats() {
-  const total = allItems.length;
-  const interested = allItems.filter(i => i.status === 'Сонирхож байна').length;
-  const ordered = allItems.filter(i => i.status === 'Захиалсан').length;
-  const sold = allItems.filter(i => i.status === 'Зарагдсан').length;
-  const spent = allItems.reduce((s,i) => s + (i.buy_price||0), 0);
-  const profit = allItems.filter(i=>i.status==='Зарагдсан').reduce((s,i) => s + ((i.sell_price||0)-(i.buy_price||0)), 0);
+function renderTable(newItemId = null) {
+  const filtered = currentFilter === 'all' ? allItems : allItems.filter(i => i.status === currentFilter);
+  const container = document.getElementById('tableContainer');
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="emoji">📦</div><h3>Бараа байхгүй</h3><p>Дээрх формоор нэм</p></div>`;
+    return;
+  }
+  const rows = filtered.map(item => {
+    const profit = (item.sell_price || 0) - (item.buy_price || 0);
+    const isNew = newItemId && item.id === newItemId;
+    const img = item.image_url ? `<img src="${item.image_url}" class="item-img" onerror="this.style.display='none'">` : `<div class="item-img-placeholder">${getTypeEmoji(item.type)}</div>`;
+    return `<tr class="${isNew ? 'new-item' : ''}">
+      <td>${img}</td>
+      <td><div style="font-weight:600">${item.name||'-'}</div>${item.notes?`<div style="font-size:11px;color:var(--muted);margin-top:2px">${item.notes}</div>`:''}</td>
+      <td><span class="type-badge ${getBadgeClass(item.type)}">${item.type||'-'}</span></td>
+      <td><span class="status-badge ${getStatusClass(item.status)}" onclick="openStatusModal('${item.id}')" title="Дарж статус солих">${item.status||'-'}</span></td>
+      <td><span style="background:var(--surface2);padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600">${item.size||'-'}</span></td>
+      <td>€${(item.buy_price||0).toFixed(2)}</td>
+      <td>€${(item.sell_price||0).toFixed(2)}</td>
+      <td class="${profit>=0?'profit-positive':'profit-negative'}">€${profit.toFixed(2)}</td>
+      <td>${item.color||'-'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          ${item.link?`<a href="${item.link}" target="_blank" class="btn-sm">🔗</a>`:''}
+          <button class="btn-sm" onclick="openEdit('${item.id}')">✏️</button>
+          <button class="btn-sm" style="color:var(--accent)" onclick="deleteItem('${item.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  container.innerHTML = `<div style="overflow-x:auto"><table><thead><tr><th></th><th>Нэр</th><th>Төрөл</th><th>Статус</th><th>Хэмжээ</th><th>Авах €</th><th>Зарах €</th><th>Ашиг</th><th>Өнгө</th><th>Үйлдэл</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
 
-  document.getElementById('statTotal').textContent = total;
-  document.getElementById('statInterested').textContent = interested;
-  document.getElementById('statOrdered').textContent = ordered;
-  document.getElementById('statSold').textContent = sold;
-  document.getElementById('statSpent').textContent = `€${spent.toFixed(0)}`;
+function updateStats() {
+  document.getElementById('statTotal').textContent = allItems.length;
+  document.getElementById('statInterested').textContent = allItems.filter(i=>i.status==='Сонирхож байна').length;
+  document.getElementById('statOrdered').textContent = allItems.filter(i=>i.status==='Захиалсан').length;
+  document.getElementById('statArrived').textContent = allItems.filter(i=>i.status==='Ирсэн').length;
+  document.getElementById('statSold').textContent = allItems.filter(i=>i.status==='Зарагдсан').length;
+  document.getElementById('statReturn').textContent = allItems.filter(i=>i.status==='Return').length;
+  const profit = allItems.filter(i=>i.status==='Зарагдсан').reduce((s,i)=>s+((i.sell_price||0)-(i.buy_price||0)),0);
   document.getElementById('statProfit').textContent = `€${profit.toFixed(0)}`;
 }
 
-// ── Type / Size selection ──
+function filterItems(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
 function selectType(type, el) {
-  document.querySelectorAll('.add-section .type-pills .pill').forEach(p => p.classList.remove('selected'));
+  document.querySelectorAll('.add-section .type-pills .pill').forEach(p=>p.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('f_type').value = type;
-  document.getElementById('f_size').value = '';
-  document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
 }
 
 function selectSize(size, el) {
-  document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#f_sizeGrid .size-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('f_size').value = size;
 }
 
-// ── Add item ──
+function selectEditType(type, el) {
+  document.querySelectorAll('#editTypePills .pill').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('e_type').value = type;
+}
+
+function selectEditSize(size, el) {
+  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('e_size').value = size;
+}
+
 async function addItem() {
   const name = document.getElementById('f_name').value.trim();
   if (!name) { showToast('Барааны нэр оруулна уу', 'error'); return; }
-
   let imageData = '';
-  const fileInput = document.getElementById('f_image');
-  if (fileInput.files && fileInput.files[0]) {
-    imageData = await fileToBase64(fileInput.files[0]);
-  }
-
+  const fi = document.getElementById('f_image');
+  if (fi.files && fi.files[0]) imageData = await fileToBase64(fi.files[0]);
   const item = {
-    name,
-    type: document.getElementById('f_type').value || 'Hoodie',
+    name, type: document.getElementById('f_type').value||'Hoodie',
     status: document.getElementById('f_status').value,
     size: document.getElementById('f_size').value,
-    buy_price: parseFloat(document.getElementById('f_buy').value) || 0,
-    sell_price: parseFloat(document.getElementById('f_sell').value) || 0,
+    buy_price: parseFloat(document.getElementById('f_buy').value)||0,
+    sell_price: parseFloat(document.getElementById('f_sell').value)||0,
     color: document.getElementById('f_color').value,
     link: document.getElementById('f_link').value,
     image_url: imageData,
     notes: document.getElementById('f_notes').value,
   };
-
   const { error } = await db.from('items').insert([item]);
-  if (error) { showToast('Алдаа гарлаа: ' + error.message, 'error'); return; }
-
+  if (error) { showToast('Алдаа: '+error.message, 'error'); return; }
   clearForm();
-  // Realtime-р автоматаар шинэчлэгдэнэ
 }
 
 function clearForm() {
-  ['f_name','f_type','f_size','f_buy','f_sell','f_color','f_link','f_notes'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('f_image').value = '';
-  const p = document.getElementById('f_preview');
-  p.src = ''; p.style.display = 'none';
-  document.querySelectorAll('.add-section .pill, #f_sizeGrid .size-btn').forEach(el => el.classList.remove('selected'));
+  ['f_name','f_type','f_size','f_buy','f_sell','f_color','f_link','f_notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f_image').value='';
+  const p=document.getElementById('f_preview'); p.src=''; p.style.display='none';
+  document.querySelectorAll('.add-section .pill, #f_sizeGrid .size-btn').forEach(el=>el.classList.remove('selected'));
 }
 
-// ── Filter ──
-function filterItems(filter, el) {
-  currentFilter = filter;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderTable();
-}
-
-// ── Delete ──
 async function deleteItem(id) {
   if (!confirm('Устгах уу?')) return;
   const { error } = await db.from('items').delete().eq('id', id);
-  if (error) { showToast('Алдаа гарлаа', 'error'); return; }
-  // Realtime-р автоматаар шинэчлэгдэнэ
+  if (error) showToast('Алдаа гарлаа', 'error');
 }
 
-// ── Edit modal ──
 function openEdit(id) {
-  const item = allItems.find(i => i.id === id);
+  const item = allItems.find(i=>i.id===id);
   if (!item) return;
-
   document.getElementById('e_id').value = item.id;
-  document.getElementById('e_name').value = item.name || '';
-  document.getElementById('e_status').value = item.status || 'Сонирхож байна';
-  document.getElementById('e_buy').value = item.buy_price || '';
-  document.getElementById('e_sell').value = item.sell_price || '';
-  document.getElementById('e_color').value = item.color || '';
-  document.getElementById('e_link').value = item.link || '';
-  document.getElementById('e_notes').value = item.notes || '';
-  document.getElementById('e_type').value = item.type || '';
-  document.getElementById('e_size').value = item.size || '';
-
-  const ep = document.getElementById('e_preview');
-  if (item.image_url) { ep.src = item.image_url; ep.style.display = 'block'; }
-  else { ep.src = ''; ep.style.display = 'none'; }
-  document.getElementById('e_image').value = '';
-
-  document.querySelectorAll('#editTypePills .pill').forEach(p => {
-    p.classList.toggle('selected', p.onclick.toString().includes(`'${item.type}'`));
+  document.getElementById('e_name').value = item.name||'';
+  document.getElementById('e_status').value = item.status||'Сонирхож байна';
+  document.getElementById('e_buy').value = item.buy_price||'';
+  document.getElementById('e_sell').value = item.sell_price||'';
+  document.getElementById('e_color').value = item.color||'';
+  document.getElementById('e_link').value = item.link||'';
+  document.getElementById('e_notes').value = item.notes||'';
+  document.getElementById('e_type').value = item.type||'';
+  document.getElementById('e_size').value = item.size||'';
+  const ep=document.getElementById('e_preview');
+  if (item.image_url) { ep.src=item.image_url; ep.style.display='block'; } else { ep.src=''; ep.style.display='none'; }
+  document.getElementById('e_image').value='';
+  document.querySelectorAll('#editTypePills .pill').forEach(p=>{
+    const t=p.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    p.classList.toggle('selected', t===item.type);
   });
-  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => {
-    b.classList.toggle('selected', b.textContent.trim() === item.size);
-  });
-
+  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b=>b.classList.toggle('selected', b.textContent.trim()===item.size));
   document.getElementById('editModal').classList.add('open');
-}
-
-function selectEditType(type, el) {
-  document.querySelectorAll('#editTypePills .pill').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('e_type').value = type;
-  document.getElementById('e_size').value = '';
-  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
-}
-
-function selectEditSize(size, el) {
-  document.querySelectorAll('#e_sizeGrid .size-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('e_size').value = size;
 }
 
 async function saveEdit() {
   const id = document.getElementById('e_id').value;
   let imageData = null;
-  const fileInput = document.getElementById('e_image');
-  if (fileInput.files && fileInput.files[0]) {
-    imageData = await fileToBase64(fileInput.files[0]);
-  }
-
+  const fi = document.getElementById('e_image');
+  if (fi.files && fi.files[0]) imageData = await fileToBase64(fi.files[0]);
   const updated = {
     name: document.getElementById('e_name').value,
     type: document.getElementById('e_type').value,
     status: document.getElementById('e_status').value,
     size: document.getElementById('e_size').value,
-    buy_price: parseFloat(document.getElementById('e_buy').value) || 0,
-    sell_price: parseFloat(document.getElementById('e_sell').value) || 0,
+    buy_price: parseFloat(document.getElementById('e_buy').value)||0,
+    sell_price: parseFloat(document.getElementById('e_sell').value)||0,
     color: document.getElementById('e_color').value,
     link: document.getElementById('e_link').value,
     notes: document.getElementById('e_notes').value,
   };
   if (imageData) updated.image_url = imageData;
-
   const { error } = await db.from('items').update(updated).eq('id', id);
   if (error) { showToast('Алдаа гарлаа', 'error'); return; }
   closeModal();
-  // Realtime-р автоматаар шинэчлэгдэнэ
 }
 
-function closeModal() {
-  document.getElementById('editModal').classList.remove('open');
+function closeModal() { document.getElementById('editModal').classList.remove('open'); }
+
+// STATUS MODAL
+function openStatusModal(id) {
+  statusEditId = id;
+  const item = allItems.find(i=>i.id===id);
+  document.getElementById('statusModalName').textContent = item ? item.name : '';
+  document.getElementById('statusModal').classList.add('open');
 }
+
+async function setStatus(newStatus) {
+  if (!statusEditId) return;
+  const { error } = await db.from('items').update({ status: newStatus }).eq('id', statusEditId);
+  if (error) { showToast('Алдаа гарлаа', 'error'); return; }
+  closeStatusModal();
+}
+
+function closeStatusModal() { document.getElementById('statusModal').classList.remove('open'); statusEditId = null; }
 
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.classList.remove('show'), 3000);
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 3000);
 }
 
-document.getElementById('editModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+document.getElementById('editModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+document.getElementById('statusModal').addEventListener('click', function(e){ if(e.target===this) closeStatusModal(); });
 
 init();
 </script>
