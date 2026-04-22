@@ -53,7 +53,7 @@
   tr.new-item td { animation: flashNew 2s ease-out forwards; }
   .stats-bar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     gap: 1px;
     background: var(--border);
     border-bottom: 1px solid var(--border);
@@ -167,6 +167,7 @@
   <div class="stat"><div class="stat-value blue" id="statArrived">0</div><div class="stat-label">Ирсэн</div></div>
   <div class="stat"><div class="stat-value green" id="statSold">0</div><div class="stat-label">Зарагдсан</div></div>
   <div class="stat"><div class="stat-value red" id="statReturn">0</div><div class="stat-label">Return</div></div>
+  <div class="stat"><div class="stat-value" id="statSpent">€0</div><div class="stat-label">Нийт зардал</div></div>
   <div class="stat"><div class="stat-value green" id="statProfit">€0</div><div class="stat-label">Ашиг</div></div>
 </div>
 
@@ -471,6 +472,7 @@ function updateStats() {
   document.getElementById('statArrived').textContent = allItems.filter(i=>i.status==='Ирсэн').length;
   document.getElementById('statSold').textContent = allItems.filter(i=>i.status==='Зарагдсан').length;
   document.getElementById('statReturn').textContent = allItems.filter(i=>i.status==='Return').length;
+  document.getElementById('statSpent').textContent = `€${allItems.reduce((s,i)=>s+(i.buy_price||0),0).toFixed(0)}`;
   const profit = allItems.filter(i=>i.status==='Зарагдсан').reduce((s,i)=>s+((i.sell_price||0)-(i.buy_price||0)),0);
   document.getElementById('statProfit').textContent = `€${profit.toFixed(0)}`;
 }
